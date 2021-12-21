@@ -1,0 +1,13 @@
+material Number/Two
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture donatello_fitted.png
+      }
+    }
+  }
+}

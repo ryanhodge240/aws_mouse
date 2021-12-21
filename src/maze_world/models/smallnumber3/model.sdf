@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="smallnumber3">
+    <pose>0 0 0.001 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://smallnumber3/meshes/number.dae</uri>
+            <scale>0.1 0.3 0.001</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://smallnumber3/materials/scripts</uri>
+            <uri>model://smallnumber3/materials/textures</uri>
+            <name>Number/Three</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -179,7 +179,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.20000000298023224
+      Size (m): 0.04000000298023224
       Style: Flat Squares
       Topic: /scan
       Unreliable: false

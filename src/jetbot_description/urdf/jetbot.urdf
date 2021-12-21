@@ -2,7 +2,7 @@
 <robot name="JetBot"  xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find jetbot_description)/urdf/jetbot.gazebo.xacro"/>
 
-  <property name="M_PI_2" value="1.570796327"/>
+  <xacro:property name="M_PI_2" value="1.570796327"/>
 
   <link name="base_footprint"/>
 

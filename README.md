@@ -5,6 +5,12 @@ cd aws_mouse
 chmod +x updateos.sh
 ./updateos.sh
 ```
+If you see any lock error, please try
+```
+sudo rm -r /var/lib/dpkg/lock*
+sudo dpkg --configure -a
+./updateos.sh
+```
 
 ### compile ROS
 ```

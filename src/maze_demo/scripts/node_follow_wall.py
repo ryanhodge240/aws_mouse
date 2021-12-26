@@ -27,6 +27,7 @@ state_dict_ = {
     0: 'find the wall',
     1: 'turn left',
     2: 'follow the wall',
+    3: 'turn around',
 }
 
 
@@ -45,11 +46,11 @@ def clbk_laser(msg):
     global regions_
     #360/5 = 72
     regions_ = {
-        'right':  min(avg(msg.ranges[0:71]),10.0),
-        'fright': min(avg(msg.ranges[72:143]),10.0),
-        'front':  min(avg(msg.ranges[144:215]),10.0),
-        'fleft':  min(avg(msg.ranges[216:287]),10.0),
-        'left':   min(avg(msg.ranges[288:359]),10.0),
+        'right':  min(avg(msg.ranges[0:10]),10.0),
+        'fright': min(avg(msg.ranges[30:40]),10.0),
+        'front':  min(avg(msg.ranges[85:95]),10.0),
+        'fleft':  min(avg(msg.ranges[140:150]),10.0),
+        'left':   min(avg(msg.ranges[170:180]),10.0),
     	}
     take_action()
 
@@ -66,6 +67,8 @@ def change_state(state):
         msg = turn_left()
     elif state_ == 2:
         msg = follow_the_wall()
+    elif state_ == 2:
+        msg = turn_around()
     else:
         rospy.logerr('Unknown state!')
 
@@ -81,19 +84,19 @@ def take_action():
     state_description = ''
 
     d = 0.8
-    e = 0.8
+    e = 0.4
 
-    if regions['front'] > d and regions['fleft'] > e and regions['fright'] > e:
+    if regions['front'] > d and regions['left'] > e and regions['right'] > e:
         state_description = 'case 1 - nothing'
         change_state(0)
     elif regions['front'] < d and regions['fleft'] > e and regions['fright'] > e:
         state_description = 'case 2 - front'
         change_state(1)
-    elif regions['front'] > d and regions['fleft'] < e and regions['fright'] < e:
-        state_description = 'case 3 - fright'
+    elif regions['front'] > d and regions['fleft'] < e and regions['left'] < e:
+        state_description = 'case 3 - too close to left'
         change_state(2)
-    elif regions['front'] > d and regions['fleft'] < e and regions['fright'] > e:
-        state_description = 'case 4 - fleft'
+    elif regions['front'] > d and regions['right'] < e and regions['fright'] > e:
+        state_description = 'case 4 - too close right'
         change_state(2)
     elif regions['front'] < d and regions['fleft'] > e and regions['fright'] < e:
         state_description = 'case 5 - front and fright'
@@ -102,8 +105,8 @@ def take_action():
         state_description = 'case 6 - front and fleft'
         change_state(2)
     elif regions['front'] < d and regions['fleft'] < e and regions['fright'] < e:
-        state_description = 'case 7 - front and fleft and fright'
-        change_state(2)
+        state_description = 'case 7 - need to turn around'
+        change_state(3)
     elif regions['front'] > d and regions['fleft'] < e and regions['fright'] < e:
         state_description = 'case 8 - fleft and fright'
         change_state(2)
@@ -116,7 +119,7 @@ def take_action():
 def find_wall():
     msg = Twist()
     msg.linear.x = 0.2
-    msg.angular.z = -0.3
+    msg.angular.z = 0
     return msg
 
 def turn_left():
@@ -124,6 +127,12 @@ def turn_left():
     msg.angular.z = 0.3
     return msg
 
+def turn_around():
+    msg = Twist()
+    msg.angular.z = 3.14   
+    return msg
+    
+    
 def follow_the_wall():
     global regions_
     global kp,ki,kd
@@ -137,7 +146,7 @@ def follow_the_wall():
     integ += error
     output = kp*error + ki*integ + kd*diff
     diff = error
-    msg.linear.x = 0.1
+    msg.linear.x = 0.0
     msg.angular.z = 0.0 - output
     long_error.publish(output)
     zero_error.publish(0.0)
@@ -183,7 +192,8 @@ def main():
             msg = turn_left()
         elif state_ == 2:
             msg = follow_the_wall()
-            pass
+        elif state_ == 3:
+            msg = turn_around()
         else:
             rospy.logerr('Unknown state!')
 

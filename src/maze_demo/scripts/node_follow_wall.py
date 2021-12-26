@@ -57,7 +57,7 @@ def change_state(state):
     global state_, state_dict_
 
     if state is not state_:
-        print 'Wall follower - [%s] - %s' % (state, state_dict_[state])
+        print ('Wall follower - [%s] - %s' % (state, state_dict_[state]))
         state_ = state
 
     if state_ == 0:
@@ -132,7 +132,8 @@ def follow_the_wall():
     integ = 0
     diff = 0
     dist = 0.1
-    error = dist - regions_['left']
+#    error = dist - regions_['left']
+    error = regions_['right'] - regions_['left']
     integ += error
     output = kp*error + ki*integ + kd*diff
     diff = error
@@ -160,7 +161,7 @@ def main():
 
     pub_ = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
-    sub = rospy.Subscriber('/my_mm_robot/laser/scan', LaserScan, clbk_laser)
+    sub = rospy.Subscriber('/scan', LaserScan, clbk_laser)
 
     rospy.Subscriber('/pid_tuning_altitude', PidTune, wall_follow)
 

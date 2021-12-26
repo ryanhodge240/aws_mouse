@@ -12,6 +12,7 @@ project(jetbot_slam)
 ###########################################################################
 find_package(catkin REQUIRED COMPONENTS
   gmapping
+  hector_mapping 
 )
 
 ##########################################
@@ -35,6 +36,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   CATKIN_DEPENDS
     gmapping
+    hector_mapping 
 )
 
 ###########

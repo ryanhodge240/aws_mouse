@@ -26,7 +26,8 @@
   <include file="$(find jetbot_description)/launch/jetbot_description.launch" />
 
   <!-- run SLAM -->
-  <include file="$(find jetbot_slam)/launch/jetbot_slam.launch" />
+  <!--include file="$(find jetbot_slam)/launch/jetbot_slam.launch" /-->
+  <include file="$(find jetbot_slam)/launch/jetbot_mapping.launch" />
   <!--include file="$(find jetbot_navigation)/launch/jetbot_move_base.launch" /-->
   
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetbot_description)/rviz/mapping_view.rviz" />

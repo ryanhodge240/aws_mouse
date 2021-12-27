@@ -3,7 +3,7 @@
 #############################################################################
 ## Set minimum required version of cmake, project name and compile options ##
 #############################################################################
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.2)
 project(jetbot_navigation)
 
 ###########################################################################
@@ -51,11 +51,14 @@ include_directories(
 #############
 ## Install ##
 #############
+catkin_install_python(PROGRAMS scripts/node_follow_wall.py scripts/node_maze_runner.py scripts/node_reading_laser.py
+       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-install(DIRECTORY launch param
+
+install(DIRECTORY launch scripts
 	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

@@ -143,7 +143,7 @@
             <script>
               <uri>model://smallnumber3/materials/scripts</uri>
               <uri>model://smallnumber3/materials/textures</uri>
-              <name>Number/One</name>
+              <name>Number/Three</name>
             </script>
           </material>
         </visual>
@@ -210,7 +210,7 @@
         <kinematic>0</kinematic>
       </link>
     </model>
-    <model name='smallnumber_red3'>
+    <model name='smallnumber_blue'>
       <pose>-2.25 -2.25 0.0051 0 -0 0</pose>
       <static>1</static>
       <link name='link'>
@@ -222,15 +222,15 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://smallnumber_red/meshes/number.dae</uri>
+              <uri>model://smallnumber_blue/meshes/number.dae</uri>
               <scale>0.35 0.35 0.001</scale>
             </mesh>
           </geometry>
           <material>
             <script>
-              <uri>model://smallnumber_red/materials/scripts</uri>
-              <uri>model://smallnumber_red/materials/textures</uri>
-              <name>Number/Red</name>
+              <uri>model://smallnumber_blue/materials/scripts</uri>
+              <uri>model://smallnumber_blue/materials/textures</uri>
+              <name>Number/Blue</name>
             </script>
           </material>
         </visual>

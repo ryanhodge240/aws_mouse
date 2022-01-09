@@ -1,4 +1,4 @@
-material Number/Three
+material Number/Blue
 {
   technique
   {
@@ -6,7 +6,7 @@ material Number/Three
     {
       texture_unit
       {
-        texture ninja_leonardo.png
+        texture blue_pad.png
       }
     }
   }

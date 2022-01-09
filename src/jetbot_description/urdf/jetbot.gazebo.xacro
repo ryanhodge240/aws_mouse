@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="JetBot_sim"  xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:arg name="camera_visualize" default="true"/>
-  <xacro:arg name="laser_visualize"  default="false"/>
+  <xacro:arg name="laser_visualize"  default="true"/>
   
   <!-- Xacro arguments for imu -->
   <xacro:arg name="imu_enable" default="true" />

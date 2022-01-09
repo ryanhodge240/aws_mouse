@@ -51,6 +51,11 @@
       <pose>0.02 0 0.0051 0 -0 0</pose>
       <static>1</static>
       <link name='link'>
+        <joint name="image_joint" type="fixed">
+          <parent link="link"/>
+          <child link="image_link"/>
+          <origin xyz="0.0 0.0 0.010" rpy="0 0 0"/>
+        </joint>
         <visual name='visual'>
           <geometry>
             <mesh>
@@ -75,6 +80,11 @@
       <pose>0.05 1 0.0051 0 -0 0</pose>
       <static>1</static>
       <link name='link'>
+        <joint name="image_joint" type="fixed">
+          <parent link="link"/>
+          <child link="image_link"/>
+          <origin xyz="0.0 0.0 0.010" rpy="0 0 0"/>
+        </joint>
         <visual name='visual'>
           <geometry>
             <mesh>
@@ -99,17 +109,22 @@
       <pose>-1 0 0.0051 0 -0 0</pose>
       <static>1</static>
       <link name='link'>
+        <joint name="image_joint" type="fixed">
+          <parent link="link"/>
+          <child link="image_link"/>
+          <origin xyz="0.0 0.0 0.010" rpy="0 0 0"/>
+        </joint>
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://smallnumber1/meshes/number.dae</uri>
+              <uri>model://smallnumber3/meshes/number.dae</uri>
               <scale>0.1 0.1 0.001</scale>
             </mesh>
           </geometry>
           <material>
             <script>
-              <uri>model://smallnumber1/materials/scripts</uri>
-              <uri>model://smallnumber1/materials/textures</uri>
+              <uri>model://smallnumber3/materials/scripts</uri>
+              <uri>model://smallnumber3/materials/textures</uri>
               <name>Number/One</name>
             </script>
           </material>
@@ -138,14 +153,14 @@
       </spot>
     </light>
     <gui fullscreen='0'>
-      <!--plugin name='sample' filename='libregenerate_widget.so'/-->
+      <plugin name='sample' filename='libregenerate_widget.so'/>
       <camera name='user_camera'>
         <pose>-0.819736 -2.085 3.40874 0 0.919643 1.3602</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <!--plugin name='maze' filename='libmaze_plugin.so'/-->
+    <plugin name='maze' filename='libmaze_plugin.so'/>
     <physics type='ode'>
       <real_time_update_rate>0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
@@ -12640,5 +12655,18 @@
         <pose>0 0 10 0 -0 0</pose>
       </light>
     </state>
+    <link name="image_link">
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <visual name="visual">
+      <origin rpy="0  0  0" xyz="0  0  0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+  </link>
   </world>
 </sdf>

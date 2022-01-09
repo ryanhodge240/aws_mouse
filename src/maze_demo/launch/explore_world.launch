@@ -2,8 +2,8 @@
 
 <launch>
   
-  <arg name="x" default="-1.35"/>
-  <arg name="y" default="1.23"/>
+  <arg name="x" default="-2.25"/>
+  <arg name="y" default="2.23"/>
   <arg name="z" default="0.03"/>
   <arg name="R" default="0"/>
   <arg name="P" default="0"/>
@@ -26,10 +26,9 @@
   <include file="$(find jetbot_description)/launch/jetbot_description.launch" />
 
   <!-- run SLAM -->
-  <!--include file="$(find jetbot_slam)/launch/jetbot_slam.launch" /-->
-  <include file="$(find jetbot_slam)/launch/jetbot_mapping.launch" />
+  <include file="$(find jetbot_slam)/launch/jetbot_hector_slam.launch" />
   <!--include file="$(find jetbot_navigation)/launch/jetbot_move_base.launch" /-->
   
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetbot_description)/rviz/mapping_view.rviz" />
+  <!-- node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetbot_description)/rviz/mapping_view.rviz" / -->
   
 </launch>

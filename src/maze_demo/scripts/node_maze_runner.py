@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env
 
 import rospy
 from sensor_msgs.msg import LaserScan
@@ -46,11 +46,11 @@ def main():
     global sensor_l, sensor_c, sensor_r
     global pub
 
-    msg = Twist()
+    msg = LaserScan()  #Twist()
 
     rospy.init_node('node_maze_runner')
     
-    sub = rospy.Subscriber('/my_mm_robot/laser/scan', LaserScan, clbk_laser)
+    sub = rospy.Subscriber('/scan', LaserScan, clbk_laser)
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
     # pub.publish(msg)

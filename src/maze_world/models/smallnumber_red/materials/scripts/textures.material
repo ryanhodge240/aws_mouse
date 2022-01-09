@@ -1,0 +1,13 @@
+material Number/Red
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture end_pad.png
+      }
+    }
+  }
+}

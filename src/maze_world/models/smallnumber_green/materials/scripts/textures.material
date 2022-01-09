@@ -1,0 +1,13 @@
+material Number/Green
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture start_pad.png
+      }
+    }
+  }
+}

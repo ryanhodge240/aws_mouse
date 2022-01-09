@@ -21,6 +21,7 @@
   <depend>joint_state_publisher</depend>
   <depend>joint_state_controller</depend>
   <depend>geometry_msgs</depend>
+  <depend>controller_manager</depend>
   <exec_depend>teleop_twist_keyboard</exec_depend>
   
   <export>

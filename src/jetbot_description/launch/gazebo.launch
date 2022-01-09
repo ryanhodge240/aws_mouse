@@ -1,5 +1,8 @@
 <launch>
 
+  <rosparam command="load" file="$(find jetbot_description)/config/jetbot_diff_drive_control.yaml" /> 
+  <rosparam command="load" file="$(find jetbot_description)/config/jetbot_diff_drive_control_pid.yaml" />
+
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
@@ -23,5 +26,14 @@
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
         respawn="false" output="screen"
         args="-urdf -param robot_description -model jetbot -x $(arg x) -y $(arg y) -z $(arg z)" />
+  
+  <node name="base_controller_spawner"  pkg="controller_manager"  type="spawner"  output="screen"  		args="mobile_base_controller" />
+
+  <node name="joint_controllers_spawner" pkg="controller_manager" type="spawner" respawn="false"
+  	output="screen"  args="joint_state_controller
+                         left_wheel_velocity_controller
+                         right_wheel_velocity_controller" >
+
+</node> 
 
 </launch>

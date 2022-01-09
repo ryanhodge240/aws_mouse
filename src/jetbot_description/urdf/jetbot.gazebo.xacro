@@ -103,6 +103,10 @@
           <max>8</max>
           <resolution>0.01</resolution>
         </range>
+        <cast_from_center/>
+	<collisions_to_ignore>
+  	  <name>lidar_link</name>
+	</collisions_to_ignore>
         <noise>
           <type>gaussian</type>
           <mean>0.0</mean>
@@ -112,6 +116,7 @@
       <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
         <topicName>scan</topicName>
         <frameName>lidar_link</frameName>
+        <update_rate>10</update_rate>
       </plugin>
     </sensor>
   </gazebo>

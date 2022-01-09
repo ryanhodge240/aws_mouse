@@ -1,0 +1,14 @@
+# PID controller
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50  
+
+left_wheel_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: JetBot__left_wheel_hinge  # base_to_0_wheel
+    pid: {p: 0.0, i: 0.0, d: 0.0}
+
+right_wheel_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: JetBot__right_wheel_hinge  # base_to_1_wheel
+    pid: {p: 1000.0, i: 0.0, d: 0.0}

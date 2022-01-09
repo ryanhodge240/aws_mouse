@@ -2,6 +2,9 @@
 <robot name="JetBot_sim"  xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:arg name="camera_visualize" default="true"/>
   <xacro:arg name="laser_visualize"  default="false"/>
+  
+  <!-- Xacro arguments for imu -->
+  <xacro:arg name="imu_enable" default="true" />
 
   <gazebo reference="left_wheel">
     <mu1>0.1</mu1>
@@ -25,6 +28,7 @@
 
   <gazebo>
     <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+    <!--plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"!-->
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
@@ -120,5 +124,47 @@
       </plugin>
     </sensor>
   </gazebo>
+
+<!-- IMU -->
+
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+ <!--   
+  <xacro:if value="$(arg imu_enable)">
+    <xacro:sensor_imu name="imu" topic_ns="imu" parent="base_link" >
+      <origin xyz="0 0 0.0275" rpy="0 0 0" />
+    </xacro:sensor_imu>
+  </xacro:if>
+   -->
+  
+  <!-- Inertia Macros -->
+  <!--
+  <xacro:include filename="$(find jetbot_description)/urdf/inertias.xacro" /> 
+  --> 
+  <!-- Inertia Macros -->
+  
+  <!-- IMU -->
+  <!--
+  <xacro:include filename="$(find jetbot_description)/urdf/bno055.urdf.xacro" />
+  -->
+  <!-- IMU -->
 
 </robot>

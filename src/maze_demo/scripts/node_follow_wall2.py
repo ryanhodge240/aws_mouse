@@ -5,11 +5,15 @@ import rospy
 import numpy as np
 from math import cos, sin
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Imu
 from sensor_msgs.msg import LaserScan
 from sensor_msgs.msg import Range
+from nav_msgs.msg import Odometry
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 np.set_printoptions(precision=2)
-
+foundHeading = False
+current_heading =0
 orbit = 0
 laser_sensors = {'w': 0, 'nw': 0, 'n': 0, 'ne': 0, 'e': 0}
 
@@ -18,6 +22,7 @@ angular_vel = 0.2
 wall_distance = 0.2
 wall_distance_forward = 0.30
 wall_distance_side = 0.15
+rotation_imu =0
 
 inf = float('inf')
 
@@ -78,21 +83,20 @@ def log_info():
 
 
 def create_velocity_message(turn_left, turn_right, forward):
-    global laser_sensors
+    global laser_sensors, rotation_imu, foundHeading
     angular = 0
     linear = 0
-    kp=15
-    error = laser_sensors['e'] - laser_sensors['w']
-    output = kp*error*angular_vel 
+
     if (turn_left):
-        angular = output
-        linear = linear_vel*0.2
+        angular = rotation_imu + 1.57
+        foundHeading = False  # need to update heading
+        #linear = linear_vel*0.2
     if (turn_right):
-        angular = output
-        linear = linear_vel*0.2
+        angular = angular
+       # linear = linear_vel*0.2
     if (forward):
         linear = linear_vel
-        angular = output
+        angular = rotation_imu
     vel_msg = Twist()
     vel_msg.linear.x = linear
     vel_msg.angular.z = angular
@@ -114,7 +118,20 @@ def publish_velocity_message(vel_msg):
     vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
     vel_pub.publish(vel_msg)
 
+def clbk_imu(msg):
+    global rotation_imu, current_heading, foundHeading
+    global roll_imu, pitch_imu, yaw_imu
+    orientation_q = msg.orientation
+    orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
+    (roll_imu, pitch_imu, yaw_imu) = euler_from_quaternion (orientation_list)
+    if (not foundHeading):
+        current_heading = yaw_imu
+        foundHeading = True
+    Kp=38
+    rotation_imu =  Kp*(current_heading-yaw_imu)
+    print(" \n IMU yaw: ",yaw_imu)
 
+    
 def laser_callback(data):
     global orbit, laser_sensors
 
@@ -237,6 +254,7 @@ def sonar_callback(data):
 
 def listeners():
     rospy.Subscriber('/scan', LaserScan, laser_callback)
+    rospy.Subscriber('/imu', Imu, clbk_imu)
     rospy.spin()
 
 

@@ -13,5 +13,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>gmapping</depend>
-  <depend>hector_mapping</depend> 
+  <depend>hector_mapping</depend>
+  <depend>hector_geotiff</depend>
+  <depend>hector_trajectory_server</depend> 
 </package>

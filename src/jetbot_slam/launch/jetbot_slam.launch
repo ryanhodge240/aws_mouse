@@ -1,21 +1,20 @@
 <!-- More information on ROS launch http://wiki.ros.org/roslaunch/XML -->
 
 <launch>  
-  <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
-  
-  <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
-    <!-- Frame names -->
-   <param name="map_frame" value="map" />
-   <param name="base_frame" value="base_footprint" />
-   <param name="odom_frame" value="odom" />
+<param name="pub_map_odom_transform" value="true"/>
+<param name="map_frame" value="map" />
+<param name="base_frame" value="base_footprint" />
+<param name="odom_frame" value="odom" />
 
+
+  <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
   <param name="use_tf_scan_transformation" value="true" />
   <param name="use_tf_pose_start_estimate" value="false" />
   <param name="pub_map_scanmatch_transform" value="true" />
   <param name="pub_map_odom_transform" value="true" />
   
-  <param name="map_start_x" value="0.5"/>
-  <param name="map_start_y" value="0.5" />
+  <!-- param name="map_start_x" value="-1.35"/ -->
+  <!-- param name="map_start_y" value="1.23" / -->
     
   <param name="map_resolution" value="0.050" />
   <param name="update_factor_free" value="0.4"/>
@@ -37,8 +36,4 @@
   <param name="scan_topic" value="scan" />
   <param name="tf_map_scanmatch_transform_frame_name" value="scanmatcher_frame" />
 </node>
-
-
-<node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster" args="0 0 0 0 0 0 /base_footprint /laser 100"/>
-
 </launch>

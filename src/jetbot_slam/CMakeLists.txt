@@ -36,7 +36,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   CATKIN_DEPENDS
     gmapping
-    hector_mapping 
+    hector_mapping
+    hector_geotiff
+    hector_trajectory_server 
 )
 
 ###########

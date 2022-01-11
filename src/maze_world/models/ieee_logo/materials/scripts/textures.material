@@ -1,0 +1,13 @@
+material IEEE/Logo
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture ieee_phili_logo_fitted.png
+      }
+    }
+  }
+}

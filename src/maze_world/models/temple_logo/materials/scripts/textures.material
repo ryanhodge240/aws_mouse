@@ -1,0 +1,13 @@
+material Temple/Logo
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture temple_logo_fitted.png
+      }
+    }
+  }
+}

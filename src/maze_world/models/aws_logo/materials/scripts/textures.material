@@ -1,0 +1,13 @@
+material AWS/Logo
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture aws_robomaker_logo_fitted.png
+      }
+    }
+  }
+}

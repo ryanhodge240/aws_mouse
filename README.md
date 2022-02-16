@@ -33,5 +33,6 @@ rosrun maze_demo node_follow_wall2.py
 ### running deep learning inferencing
 #### open another terminal to run the classifier using deep learning neural network
 ```
+EXPORT VEHICLE_NAME=''
 roslaunch img_recognition infer.launch 
 ```

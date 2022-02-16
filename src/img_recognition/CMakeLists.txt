@@ -200,7 +200,7 @@ catkin_install_python(PROGRAMS src/inference_model.py
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
-install(DIRECTORY launch script param 
+install(DIRECTORY launch script param model
 	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 #############

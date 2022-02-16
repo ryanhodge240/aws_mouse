@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- start basic args -->
+    <arg name="veh" default="$(env VEHICLE_NAME)"/>
+    <arg name="inference_node_name" default="inference_model"/>
+    <arg name="reaction_node_name" default="inference_to_reaction"/>
+    <arg name="pkg_name" default="img_recognition"/>   
+    <arg name="config" default="baseline" />
+    <arg name="reaction_output" default="screen" />
+    <arg name="confidence_threshold" default="0.8" />
+    
+    <!-- start switch args -->
+    <arg name="raw" default="true"/>
+    <arg name="reaction" default="false"/>
+    <arg name="camera" default="true"/>
+
+    <!-- inference model -->
+        <node  pkg="$(arg pkg_name)" type="$(arg inference_node_name).py" name="$(arg inference_node_name)" clear_params="true" output="screen" required="true">
+            <rosparam file="$(find img_recognition)/param/inference_model.yaml" command="load"/>
+        </node>
+ 
+   
+
+</launch>

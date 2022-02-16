@@ -1,0 +1,2 @@
+model_pth: flower.pth
+use_cuda: true

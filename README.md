@@ -24,6 +24,10 @@ source install/setup.sh
 export DISPLAY=:0
 roslaunch maze_demo explore_world.launch
 ```
+### running the robot. [node_follow_wall2.py has the cmd_vel topic to move the robot]
+```
+rosrun maze_demo node_follow_wall2.py
+```
 
 ### running deep learning inferencing
 ```

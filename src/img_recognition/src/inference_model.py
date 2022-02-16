@@ -18,7 +18,7 @@ class Inference_Model_Node(object):
         self.package = "img_recognition"
         self.node_name = rospy.get_name()
         self.veh_name = self.node_name.split("/")[1]
-        self.start = rospy.wait_for_message("/camera/image/raw", Image)
+        self.start = rospy.wait_for_message("/camera/rgb/image_raw", Image)
         rospy.loginfo("[{}]  Initializing img_model_inference.py......".format(self.node_name))
 
         # set/get ros param

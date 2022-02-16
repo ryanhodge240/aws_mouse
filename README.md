@@ -14,7 +14,6 @@ sudo dpkg --configure -a
 
 ### compile ROS
 ```
-rosws update
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
 source install/setup.sh
@@ -24,4 +23,9 @@ source install/setup.sh
 ```
 export DISPLAY=:0
 roslaunch maze_demo explore_world.launch
+```
+
+### running deep learning inferencing
+```
+roslaunch img_recognition infer.launch 
 ```

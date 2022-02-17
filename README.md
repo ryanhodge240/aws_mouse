@@ -33,7 +33,7 @@ rosrun maze_demo node_follow_wall2.py
 ### running deep learning inferencing
 #### open another terminal to run the classifier using deep learning neural network
 ```
-pip3 install torch torchvision
+pip install torch torchvision
 EXPORT VEHICLE_NAME=''
 roslaunch img_recognition infer.launch __model_path:=somemodel.pth
 ```

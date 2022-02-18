@@ -34,6 +34,6 @@ rosrun maze_demo node_follow_wall2.py
 #### open another terminal to run the classifier using deep learning neural network
 ```
 pip install torch torchvision  future
-EXPORT VEHICLE_NAME=''
+export VEHICLE_NAME=''
 roslaunch img_recognition infer.launch 
 ```

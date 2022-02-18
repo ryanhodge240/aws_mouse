@@ -6,6 +6,7 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import CompressedImage, Image
 from img_recognition.msg import Inference
+from custommodel import *
 #from jetcam_ros.utils import bgr8_to_jpeg
 
 #import cv2
@@ -47,13 +48,15 @@ class Inference_Model_Node(object):
 
             # configure subscriber
             self.first_sub = True
-            self.sub_msg = rospy.Subscriber("~image/raw", Image, self.convert_image_to_cv2,queue_size=1)
+            self.sub_msg = rospy.Subscriber("/camera/rgb/image_raw", Image, self.convert_image_to_cv2,queue_size=1)
 
             # configure Publisher
-            self.pub_msg = rospy.Publisher("~inference", Inference, queue_size=1)
+            self.pub_msg = rospy.Publisher("/inference", Inference, queue_size=1)
     
     def check_model_exist(self, name):
+        
         if not name in self.recording.keys():
+            
             rospy.logerr("[{}] does not exist in folder [model]. Please check your model_pth in [{}].".format(name,self.getFilePath(name="inference_model.yaml", folder="param") ))
             rospy.logerr("There are model_pth you can use below:")
             rospy.logerr(list(self.recording.keys()))
@@ -63,7 +66,7 @@ class Inference_Model_Node(object):
     def load_model(self, model="alexnet", param_pretrained=False, kind_of_classifier=2):
         # reference : https://pytorch.org/docs/stable/torchvision/models.html
         model_list = [
-                      "resnet18", "alexnet", "squeezenet", "vgg16", 
+                      "resnet18", "alexnet", "squeezenet", "vgg16", "custom",
                       "densenet", "inception", "googlenet", "shufflenet", 
                       "mobilenet", "resnet34", "wide_resnet50_2", "mnasnet" 
                      ]
@@ -71,7 +74,10 @@ class Inference_Model_Node(object):
         if model in model_list:
             rospy.logwarn("[{0}] [{1}]] use [{2}]. Need some time to load model [{1}]...".format(self.node_name, self.model_name, model))
             start_time = rospy.get_time()
-            if model == "resnet18":
+            self.modelname = model
+            if model == "custom":
+                self.model = SimpleNet(num_classes=5)
+            elif model == "resnet18":
                 self.model = torchvision.models.resnet18(pretrained=param_pretrained)
                 self.model.fc = torch.nn.Linear(512,kind_of_classifier)
             elif model == "alexnet":
@@ -141,7 +147,7 @@ class Inference_Model_Node(object):
         try:
             # Convert your ROS Image ssage to opencv2
             cv2_img = cv2.resize(self.bridge.imgmsg_to_cv2(img_msg, desired_encoding="bgr8"), (224, 224))
-            #jpeg_img = cv2.resize(bgr8_to_jpeg(cv2_img), (224, 224))
+            #jpeg_img = cv2.resize(bgr8_to_jpeg(cv2_img), (224, 224)
             self.inference(img=cv2_img, labels=self.labels)
         except CvBridgeError as e:
             print(e)
@@ -149,10 +155,15 @@ class Inference_Model_Node(object):
     def preprocess(self, camera_value): 
         img = camera_value
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = img.transpose((2, 0, 1))
-        img = torch.from_numpy(img).float()
-        img = self.process_img_normalize(img)
-        img = img.to(self.device)
+        
+        if (self.modelname == "custom"):
+            img=transformer(img)
+        else:
+            img = img.transpose((2, 0, 1))
+            img = torch.from_numpy(img).float()
+            img = self.process_img_normalize(img)
+            img = img.to(self.device)
+            
         img = img[None, ...]
         return img   
 

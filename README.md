@@ -26,9 +26,9 @@ roslaunch maze_demo explore_world.launch
 ```
 ##### if you want to show laser scan (help to see if the robot hits the wall)
 ```
-roslaunch maze_demo explore_world.launch laser_visualize:=true camera_visualize:=true
+roslaunch maze_demo explore_world.launch laser_visualize:=true 
 ```
-##### if you want to show camera scan 
+##### if you want to show camera scan (may be combined with laser visualization)
 ```
 roslaunch maze_demo explore_world.launch camera_visualize:=true
 ```

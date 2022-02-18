@@ -35,5 +35,5 @@ rosrun maze_demo node_follow_wall2.py
 ```
 pip install torch torchvision  future
 EXPORT VEHICLE_NAME=''
-roslaunch img_recognition infer.launch __model_path:=somemodel.pth
+roslaunch img_recognition infer.launch 
 ```

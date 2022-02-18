@@ -2,6 +2,8 @@
 <robot name="JetBot"  xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:arg name="camera_visualize" default="true"/>
   <xacro:arg name="laser_visualize"  default="true"/>
+  <xacro:arg name="camera_xyz"  default="0.065   0      0.0857"/>
+  <xacro:arg name="camera_rpy"  default="0    0.25  0"/>
   <xacro:include filename="$(find jetbot_description)/urdf/jetbot.gazebo.xacro"/>
   <xacro:property name="M_PI_2" value="1.570796327"/>
 
@@ -52,7 +54,7 @@
   <joint name="camera_joint" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin rpy="0    0.25  0" xyz="0.065   0      0.0857"/>
+    <origin rpy="$(arg camera_rpy)" xyz="$(arg camera_xyz)"/>
     <axis xyz="0.96891  0       0.2474"/>
   </joint>
 

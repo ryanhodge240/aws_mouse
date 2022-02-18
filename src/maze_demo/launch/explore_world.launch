@@ -8,6 +8,9 @@
   <arg name="R" default="0"/>
   <arg name="P" default="0"/>
   <arg name="Y" default="-1.57"/> 
+  <arg name="laser_visualize" default="false"/>
+  <arg name="camera_visualize" default="true"/>
+
     
   <!-- Gazebo world loading -->
   <include file="$(find maze_world)/launch/world.launch" /> 
@@ -20,13 +23,15 @@
     <arg name="P" value="$(arg P)" /> 
     <arg name="Y" value="$(arg Y)" /> 
     <arg name="R" value="$(arg R)" /> 
+    <arg name="laser_visualize" value="$(arg laser_visualize)"/>
+    <arg name="camera_visualize" value="$(arg camera_visualize)"/>
   </include>
 
   <!-- rosbot description -->
   <include file="$(find jetbot_description)/launch/jetbot_description.launch" />
 
   <!-- run SLAM -->
-  <include file="$(find jetbot_slam)/launch/jetbot_hector_slam.launch" />
+  <!--include file="$(find jetbot_slam)/launch/jetbot_hector_slam.launch" /-->
   <!--include file="$(find jetbot_navigation)/launch/jetbot_move_base.launch" /-->
   
   <!-- node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetbot_description)/rviz/mapping_view.rviz" / -->

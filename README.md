@@ -33,6 +33,7 @@ roslaunch maze_demo explore_world.launch worldfile:=empty_rose.world
 ##### see what camera sees
 ###### open another terminal
 ```
+source install/setup.sh
 export DISPLAY=:0
 rqt_image_view 
 ```
@@ -49,6 +50,7 @@ roslaunch maze_demo explore_world.launch camera_visualize:=true
 #####  open another terminal 
 
 ```
+source install/setup.sh
 rosrun maze_demo node_follow_wall2.py
 ```
 

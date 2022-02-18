@@ -1,4 +1,4 @@
-best3-2021-02-23-15-31-49.pth:
+flower.pth:
   build_time: 2021-02-23-15-36-15
   labels:
     blocked: 56
@@ -12,7 +12,7 @@ best3-2021-02-23-15-31-49.pth:
     accuracy: 1.0
     epochs: 10
     learning_rate: 0.001
-    model: alexnet
+    model: custom
     momentum: 0.09
     train_time: 194.45
-    use_cuda: true
+    use_cuda: false

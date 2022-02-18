@@ -59,6 +59,5 @@ rosrun maze_demo node_follow_wall2.py
 ##### to run the classifier using deep learning neural network
 ```
 source install/setup.bash
-export VEHICLE_NAME=''
 roslaunch img_recognition infer.launch 
 ```

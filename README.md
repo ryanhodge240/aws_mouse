@@ -24,6 +24,15 @@ source install/setup.sh
 export DISPLAY=:0
 roslaunch maze_demo explore_world.launch
 ```
+##### if you want to show laser scan (help to see if the robot hits the wall)
+```
+roslaunch maze_demo explore_world.launch laser_visualize:=true camera_visualize:=true
+```
+##### if you want to show camera scan 
+```
+roslaunch maze_demo explore_world.launch camera_visualize:=true
+```
+
 ### running the robot. [node_follow_wall2.py has the cmd_vel topic to move the robot]
 ##### open another terminal
 ```

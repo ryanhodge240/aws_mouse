@@ -1,5 +1,8 @@
 <launch>
-  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find jetbot_description)/urdf/jetbot.urdf'" />
+    <arg name="laser_visualize" default="false"/>
+    <arg name="camera_visualize" default="true"/>
+
+  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find jetbot_description)/urdf/jetbot.urdf' laser_visualize:=$(arg laser_visualize) camera_visualize:=$(arg camera_visualize)" />
   <param name="robot_description" command="$(arg urdf_file)" />
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="50.0" />

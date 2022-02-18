@@ -10,10 +10,13 @@
   <arg name="Y" default="-1.57"/> 
   <arg name="laser_visualize" default="false"/>
   <arg name="camera_visualize" default="true"/>
-
-    
+  <!--arg name="worldfile" default="empty_rose.world" /-->
+  <arg name="worldfile" default="jetbotSize.world" />
+        
   <!-- Gazebo world loading -->
-  <include file="$(find maze_world)/launch/world.launch" /> 
+  <include file="$(find maze_world)/launch/world.launch" >
+      <arg name="worldfile" value="$(arg worldfile)" />
+  </include> 
 
   <!-- robot spawn -->
   <include file="$(find jetbot_description)/launch/spawn.launch" >

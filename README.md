@@ -16,7 +16,7 @@ sudo dpkg --configure -a
 ```
 rosdep install --from-paths src --ignore-src -r -y
 colcon build
-source install/setup.sh
+source install/setup.bash
 ```
 
 ### open virtual desktop
@@ -33,7 +33,7 @@ roslaunch maze_demo explore_world.launch worldfile:=empty_rose.world
 ##### see what camera sees
 ###### open another terminal
 ```
-source install/setup.sh
+source install/setup.bash
 export DISPLAY=:0
 rqt_image_view 
 ```
@@ -50,7 +50,7 @@ roslaunch maze_demo explore_world.launch camera_visualize:=true
 #####  open another terminal 
 
 ```
-source install/setup.sh
+source install/setup.bash
 rosrun maze_demo node_follow_wall2.py
 ```
 
@@ -58,7 +58,7 @@ rosrun maze_demo node_follow_wall2.py
 #### open another terminal 
 ##### to run the classifier using deep learning neural network
 ```
-source install/setup.sh
+source install/setup.bash
 export VEHICLE_NAME=''
 roslaunch img_recognition infer.launch 
 ```

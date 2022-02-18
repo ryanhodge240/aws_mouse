@@ -1,8 +1,11 @@
 flower.pth:
   build_time: 2021-02-23-15-36-15
   labels:
-    blocked: 56
-    free: 73
+    daisy: 73
+    sunflower: 50 
+    dandelion: 40
+    tulip: 30
+    rose: 20
   loader:
     batch_size: 8
     num_workers: 0

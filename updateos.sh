@@ -10,6 +10,9 @@ then
     exit
 fi
 
+# install torch
+pip install torch torchvision  future
+
 # update cmake   
 
 currentver=$(cmake --version | head -1 | cut -d' ' -f3)

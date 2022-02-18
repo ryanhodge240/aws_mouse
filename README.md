@@ -39,17 +39,19 @@ roslaunch maze_demo explore_world.launch camera_visualize:=true
 ```
 
 ### running the robot. [node_follow_wall2.py has the cmd_vel topic to move the robot]
-##### open another terminal
+#####  open another terminal 
+
 ```
 rosrun maze_demo node_follow_wall2.py
 ```
 
 ### running deep learning inferencing
-## install python package
+## #install python package
 ```
 pip install torch torchvision  future
 ```
-#### open another terminal to run the classifier using deep learning neural network
+#### open another terminal 
+##### to run the classifier using deep learning neural network
 ```
 source install/setup.sh
 export VEHICLE_NAME=''

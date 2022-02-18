@@ -29,6 +29,13 @@ roslaunch maze_demo explore_world.launch
 roslaunch maze_demo explore_world.launch worldfile:=empty_rose.world
 ```
 
+
+##### see what camera sees
+###### open another terminal
+```
+export DISPLAY=:0
+rqt_image_view 
+```
 ##### if you want to show laser scan (help to see if the robot hits the wall)
 ```
 roslaunch maze_demo explore_world.launch laser_visualize:=true 

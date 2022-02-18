@@ -1,2 +1,2 @@
 model_pth: flower.pth
-use_cuda: true
+use_cuda: false

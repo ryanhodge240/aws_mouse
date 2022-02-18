@@ -55,10 +55,6 @@ rosrun maze_demo node_follow_wall2.py
 ```
 
 ### running deep learning inferencing
-## #install python package
-```
-pip install torch torchvision  future
-```
 #### open another terminal 
 ##### to run the classifier using deep learning neural network
 ```

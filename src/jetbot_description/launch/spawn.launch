@@ -3,7 +3,7 @@
   <!--   args="0 0 0 0 0 0 base_link base_footprint 40" /> -->
   <param 
     name="robot_description" 
-    command="$(find xacro)/xacro --inorder '$(find jetbot_description)/urdf/jetbot.urdf' stereo_camera:=false"/>
+    command="$(find xacro)/xacro --inorder '$(find jetbot_description)/urdf/jetbot.urdf' laser_visualize:=$(arg laser_visualize)"/>
  
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>
@@ -11,7 +11,9 @@
     <arg name="P" default="0"/>
     <arg name="R" default="0"/>
     <arg name="Y" default="0"/>
- 
+    <arg name="laser_visualize" default="false"/>
+    <arg name="camera_visualize" default="true"/>
+
     <node name="jetbot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
           args="-urdf -param robot_description -model jetbot -x $(arg x) -y $(arg y) -z $(arg z) -P $(arg P) -R $(arg R) -Y $(arg Y)" />
   

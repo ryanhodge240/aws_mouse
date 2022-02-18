@@ -24,6 +24,11 @@ source install/setup.sh
 export DISPLAY=:0
 roslaunch maze_demo explore_world.launch
 ```
+###### if load an empty world with rose, you can use
+```
+roslaunch maze_demo explore_world.launch worldfile:=empty_rose.world
+```
+
 ##### if you want to show laser scan (help to see if the robot hits the wall)
 ```
 roslaunch maze_demo explore_world.launch laser_visualize:=true 

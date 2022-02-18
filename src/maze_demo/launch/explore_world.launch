@@ -23,13 +23,14 @@
     <arg name="P" value="$(arg P)" /> 
     <arg name="Y" value="$(arg Y)" /> 
     <arg name="R" value="$(arg R)" /> 
-    <arg name="laser_visualize" value="$(arg laser_visualize)"/>
-    <arg name="camera_visualize" value="$(arg camera_visualize)"/>
-  </include>
+    </include>
 
   <!-- rosbot description -->
-  <include file="$(find jetbot_description)/launch/jetbot_description.launch" />
-
+  <include file="$(find jetbot_description)/launch/jetbot_description.launch">
+      <arg name="laser_visualize" value="$(arg laser_visualize)"/>
+    <arg name="camera_visualize" value="$(arg camera_visualize)"/>
+  </include>
+  
   <!-- run SLAM -->
   <!--include file="$(find jetbot_slam)/launch/jetbot_hector_slam.launch" /-->
   <!--include file="$(find jetbot_navigation)/launch/jetbot_move_base.launch" /-->

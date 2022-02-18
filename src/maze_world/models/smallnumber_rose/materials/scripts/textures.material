@@ -1,0 +1,13 @@
+material Number/Rose
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture rose_pad.jpg
+      }
+    }
+  }
+}

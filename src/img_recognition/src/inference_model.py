@@ -6,6 +6,7 @@ import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import CompressedImage, Image
 from img_recognition.msg import Inference
+from img_recognition.msg import Prediction
 from custommodel import *
 #from jetcam_ros.utils import bgr8_to_jpeg
 
@@ -52,6 +53,7 @@ class Inference_Model_Node(object):
 
             # configure Publisher
             self.pub_msg = rospy.Publisher("/inference", Inference, queue_size=1)
+            self.pub_pmsg = rospy.Publisher("/prediction", Prediction, queue_size=1)
     
     def check_model_exist(self, name):
         
@@ -181,11 +183,18 @@ class Inference_Model_Node(object):
         predict = torch.nn.functional.softmax(predict, dim=1)
         local_confidence = {}
         pub_confidence = Inference()
+        max_confidence = Prediction()
+        #max_confidence.confidence  = 0.0
         for text in self.labels:
             local_confidence[text] = float(predict.flatten()[self.labels.index(text)])
+            if (local_confidence[text]>=max_confidence.confidence ):
+                max_confidence.confidence  = local_confidence[text]
+                max_confidence.label = text
+                
         pub_confidence.labels = local_confidence.keys()
         pub_confidence.confidence = local_confidence.values()
         self.pub_msg.publish(pub_confidence)
+        self.pub_pmsg.publish(max_confidence)
         time.sleep(0.001)
 
     def inference_information(self, interval):

@@ -12,6 +12,7 @@ fi
 
 # install torch
 pip install torch torchvision  future
+python -m pip install --upgrade Pillow
 echo "export VEHICLE_NAME=''" >> ~/.bashrc
 
 # update cmake   

@@ -55,6 +55,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
     FILES
     Inference.msg
+    Prediction.msg
     #Message2.msg
  )
 

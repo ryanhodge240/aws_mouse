@@ -61,3 +61,11 @@ rosrun maze_demo node_follow_wall2.py
 source install/setup.bash
 roslaunch img_recognition infer.launch 
 ```
+
+#### open another terminal 
+##### to run the following command to get prediction/inference
+```
+source install/setup.bash
+rostopic echo -n1 /prediction
+rostopic echo -n1 /inference 
+```

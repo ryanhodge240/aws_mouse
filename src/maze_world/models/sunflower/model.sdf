@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="sunflower">
+    <pose>0 0 0.001 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://sunflower/meshes/number.dae</uri>
+            <scale>0.1 0.3 0.001</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://sunflower/materials/scripts</uri>
+            <uri>model://ssunflower/materials/textures</uri>
+            <name>Sunflower</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

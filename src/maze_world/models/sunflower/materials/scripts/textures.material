@@ -1,0 +1,13 @@
+material Sunflower
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture sunflower_fitted.png
+      }
+    }
+  }
+}

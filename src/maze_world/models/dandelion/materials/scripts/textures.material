@@ -1,0 +1,13 @@
+material Dandelion
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture dandelion_fitted.png
+      }
+    }
+  }
+}

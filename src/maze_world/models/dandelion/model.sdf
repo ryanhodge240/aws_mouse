@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="dandelion">
+    <pose>0 0 0.001 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://dandelion/meshes/number.dae</uri>
+            <scale>0.1 0.3 0.001</scale>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://dandelion/materials/scripts</uri>
+            <uri>model://dandelion/materials/textures</uri>
+            <name>Dandelion</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

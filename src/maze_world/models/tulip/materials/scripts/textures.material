@@ -1,0 +1,13 @@
+material Tulip
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture tulip_fitted.png
+      }
+    }
+  }
+}

@@ -140,8 +140,16 @@ def laser_callback(data):
     global orbit, laser_sensors
 
     # find where the wall distance are
+    # will detemine the values of laser_sensors['l'], laser_sensors['fl'], laser_sensors['f'],
+    #              laser_sensors['fr'], laser_sensors['r']
     calculate_lasers_range(data)
 
+    # begin the logic
+    # put logic here to determine the direction of forward, turn_left or turn_right
+    # based on the values laser_sensors['l'], laser_sensors['fl'], laser_sensors['f'],
+    #              laser_sensors['fr'], laser_sensors['r']
+    
+    # end of the logic
     linear = 0
     angular = 0
     forward = True

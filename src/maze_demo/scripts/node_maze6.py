@@ -27,8 +27,8 @@ angular_vel = 0.3
 t0=0
 
 wall_distance = 0.15
-wall_distance_forward = 0.05
-wall_distance_side = 0.75
+wall_distance_forward = 0.1
+wall_distance_side = 0.15
 rotation_imu =0
 total_step = 0
 
@@ -79,7 +79,7 @@ class Micromouse_Node(object):
             elif (self.laser_sensors['f']>wall_distance_forward):
                 #move forward    
                 print("          follow the wall  move forward     ") 
-                fwall=0.3
+                fwall=0.312
                 if  (self.laser_sensors['f']>fwall):
                     self.move_onecell(fwall)
                 else:

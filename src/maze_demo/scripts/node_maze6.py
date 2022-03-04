@@ -146,12 +146,12 @@ class Micromouse_Node(object):
     def follow_right_wall(self):
         global kp,ki,kd
         global long_error, zero_error
-        kp =  111
+        kp =  101
         ki = 0
         kd = 0
 
         theta = 45;
-        desired_trajectory =0.095
+        desired_trajectory =0.14
         a = self.laser_sensors['fr']
         b = self.laser_sensors['r']
         swing = math.radians(theta)

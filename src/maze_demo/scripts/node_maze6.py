@@ -151,7 +151,7 @@ class Micromouse_Node(object):
         kd = 0
 
         theta = 45;
-        desired_trajectory =0.14
+        desired_trajectory =0.12
         a = self.laser_sensors['fr']
         b = self.laser_sensors['r']
         swing = math.radians(theta)

@@ -242,7 +242,7 @@
     <gui fullscreen='0'>
       <plugin name='sample' filename='libregenerate_widget.so'/>
       <camera name='user_camera'>
-        <pose>5.04245 -5.00564 1.87978 0 0.275643 2.35619</pose>
+        <pose>0 0 7 0 1.57 0 </pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

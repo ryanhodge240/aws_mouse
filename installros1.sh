@@ -7,15 +7,16 @@ ver="$(lsb_release -sr)"
 if [ "$ver" = "20.04" ] ; then
   sudo apt install ros-noetic-desktop-full -y
   echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+  sudo apt install python3-rosdep -y
 fi
 if [ "$ver" = "18.04" ] ; then
   sudo apt install ros-melodic-desktop-full -y
   echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+  sudo apt install python-rosdep -y
 fi
 
 source ~/.bashrc
 
-sudo apt install python3-rosdep -y
 sudo rosdep init
 rosdep update
 

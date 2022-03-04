@@ -4,11 +4,11 @@ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo ap
 
 sudo apt update
 ver="$(lsb_release -sr)"
-if [ "$ver" = "20.04" ]
+if [ "$ver" = "20.04" ] ; then
   sudo apt install ros-noetic-desktop-full -y
   echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 fi
-if [ "$ver" = "18.04" ]
+if [ "$ver" = "18.04" ] ; then
   sudo apt install ros-melodic-desktop-full -y
   echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 fi

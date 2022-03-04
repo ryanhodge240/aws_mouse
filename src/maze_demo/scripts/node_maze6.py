@@ -28,7 +28,7 @@ t0=0
 
 wall_distance = 0.15
 wall_distance_forward = 0.1
-wall_distance_side = 0.15
+wall_distance_side = 0.35
 rotation_imu =0
 total_step = 0
 

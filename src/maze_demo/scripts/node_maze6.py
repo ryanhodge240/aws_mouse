@@ -27,7 +27,7 @@ angular_vel = 0.3
 t0=0
 
 wall_distance = 0.15
-wall_distance_forward = 0.1
+wall_distance_forward = 0.05
 wall_distance_side = 0.35
 rotation_imu =0
 total_step = 0
@@ -73,7 +73,20 @@ class Micromouse_Node(object):
         
         while not rospy.is_shutdown():
             print('current left and front, right distance {:.3f} ---{:.3f}   {:.3f}'.format(self.laser_sensors['l'], self.laser_sensors['f'], self.laser_sensors['r']))
-            if (self.laser_sensors['l']>wall_distance_side and self.leftTurn==False and self.prevleftTurn == False):
+            # if all three side are great thant the threshold, should go forward
+            if (self.laser_sensors['l']>wall_distance_side and self.laser_sensors['r']>wall_distance_side and self.laser_sensors['f']>wall_distance_forward):
+                #move forward    
+                print("          follow the wall  move forward - all three sides are open    ") 
+                fwall=0.312
+                if  (self.laser_sensors['f']>fwall):
+                    self.move_onecell(fwall)
+                else:
+                    print("distacne need to drive {:.3f}".format(self.laser_sensors['f']))
+                    dist = self.laser_sensors['f'] 
+                    self.move_onecell(dist)
+                total_step = total_step+1
+                print(total_step)            
+            elif (self.laser_sensors['l']>wall_distance_side and self.leftTurn==False and self.prevleftTurn == False):
                 print('turn left front space {:.3f}'.format(self.laser_sensors['f']))
                 self.turnleft()
             elif (self.laser_sensors['f']>wall_distance_forward):

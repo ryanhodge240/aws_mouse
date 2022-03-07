@@ -19,3 +19,26 @@ flower.pth:
     momentum: 0.09
     train_time: 194.45
     use_cuda: false
+    gpu_model: false
+flower_pretrainm2_gpu.pth:
+  build_time: 2021-02-23-15-36-15
+  labels:
+    daisy: 0
+    sunflower: 1 
+    dandelion: 2
+    tulip: 3
+    rose: 4
+  loader:
+    batch_size: 8
+    num_workers: 0
+    shuffle: true
+  purpose: classifier
+  train:
+    accuracy: 1.0
+    epochs: 10
+    learning_rate: 0.001
+    model: pretrained
+    momentum: 0.09
+    train_time: 194.45
+    use_cuda: false
+    gpu_model: true

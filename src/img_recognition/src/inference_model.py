@@ -7,7 +7,10 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import CompressedImage, Image
 from img_recognition.msg import Inference
 from img_recognition.msg import Prediction
+import custommodel
+import pretrianedmodel
 from custommodel import *
+from pretrianedmodel import *
 #from jetcam_ros.utils import bgr8_to_jpeg
 
 #import cv2
@@ -36,9 +39,10 @@ class Inference_Model_Node(object):
             self.labels = sorted(list(self.recording[self.model_name]["labels"].keys()))
             self.kind_of_classifier = len(self.labels)
             self.model_struct = self.recording[self.model_name]["train"]["model"]
+            self.gpu_model = self.recording[self.model_name]["train"]["gpu_model"]
             self.model = self.load_model(model=self.model_struct, param_pretrained=False, kind_of_classifier=self.kind_of_classifier) # configure: self.model 
             self.cuda(use=self.use_cuda) # configure: self.device, self.model
-
+ 
             # configure parameter with processing image
             self.process_img_mean  = 255.0 * np.array([0.485, 0.456, 0.406])
             self.process_img_stdev = 255.0 * np.array([0.229, 0.224, 0.225])
@@ -56,7 +60,6 @@ class Inference_Model_Node(object):
             self.pub_pmsg = rospy.Publisher("/prediction", Prediction, queue_size=1)
     
     def check_model_exist(self, name):
-        
         if not name in self.recording.keys():
             
             rospy.logerr("[{}] does not exist in folder [model]. Please check your model_pth in [{}].".format(name,self.getFilePath(name="inference_model.yaml", folder="param") ))
@@ -68,7 +71,7 @@ class Inference_Model_Node(object):
     def load_model(self, model="alexnet", param_pretrained=False, kind_of_classifier=2):
         # reference : https://pytorch.org/docs/stable/torchvision/models.html
         model_list = [
-                      "resnet18", "alexnet", "squeezenet", "vgg16", "custom",
+                      "resnet18", "alexnet", "squeezenet", "vgg16", "custom", "pretrained",
                       "densenet", "inception", "googlenet", "shufflenet", 
                       "mobilenet", "resnet34", "wide_resnet50_2", "mnasnet" 
                      ]
@@ -79,6 +82,8 @@ class Inference_Model_Node(object):
             self.modelname = model
             if model == "custom":
                 self.model = SimpleNet(num_classes=5)
+            elif model == "pretrained":
+                self.model = PretrainedNet(num_classes=5)
             elif model == "resnet18":
                 self.model = torchvision.models.resnet18(pretrained=param_pretrained)
                 self.model.fc = torch.nn.Linear(512,kind_of_classifier)
@@ -111,7 +116,11 @@ class Inference_Model_Node(object):
             elif model == "mnasnet":
                 self.model = torchvision.models.mnasnet1_0(pretrained=param_pretrained)
             model_pth = self.getFilePath(name=self.model_name, folder="model")
-            self.model.load_state_dict(torch.load(model_pth))
+            if (self.gpu_model):
+                self.model.load_state_dict(torch.load(model_pth, map_location='cpu'))
+            else:
+                self.model.load_state_dict(torch.load(model_pth))
+                
             interval = rospy.get_time() - start_time
             rospy.loginfo("[{}] Done with loading model! Use {:.2f} seconds.".format(self.node_name, interval))
             rospy.loginfo("[{}] There are {} objects you want to recognize.".format(self.node_name, kind_of_classifier))
@@ -159,7 +168,9 @@ class Inference_Model_Node(object):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         
         if (self.modelname == "custom"):
-            img=transformer(img)
+            img=custommodel.transformer(img)
+        elif (self.modelname == "pretrained"):
+            img=pretrianedmodel.transformer(img)
         else:
             img = img.transpose((2, 0, 1))
             img = torch.from_numpy(img).float()

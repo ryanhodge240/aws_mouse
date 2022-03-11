@@ -31,7 +31,7 @@
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <!--odometrySource>encoder</odometrySource-->
-      <odometrySource>world</odometrySource>
+      <odometrySource>$(arg odomsource)</odometrySource>
       <publishOdomTF>true</publishOdomTF>
       <robotBaseFrame>base_footprint</robotBaseFrame>
       <publishWheelTF>false</publishWheelTF>

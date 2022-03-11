@@ -36,7 +36,7 @@
       <arg name="laser_visualize" value="$(arg laser_visualize)"/>
     <arg name="camera_visualize" value="$(arg camera_visualize)"/>
       <arg name="camera_xyz"  value="$(arg camera_xyz)"/>
-    <arg name="odomsource" value="$(arg odomsource)">
+    <arg name="odomsource" value="$(arg odomsource)"/>
   <arg name="camera_rpy"  value="$(arg camera_rpy)"/>
   </include>
   

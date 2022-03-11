@@ -4,6 +4,7 @@
   <xacro:arg name="laser_visualize"  default="true"/>
   <xacro:arg name="camera_xyz"  default="0.065   0      0.0857"/>
   <xacro:arg name="camera_rpy"  default="0    0.25  0"/>
+  <xacro:arg name="odomsource"  default="encoder"/>
   <xacro:include filename="$(find jetbot_description)/urdf/jetbot.gazebo.xacro"/>
   <xacro:property name="M_PI_2" value="1.570796327"/>
 

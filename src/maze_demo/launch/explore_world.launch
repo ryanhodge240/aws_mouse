@@ -9,6 +9,7 @@
   <arg name="P" default="0"/>
   <arg name="Y" default="-1.57"/> 
   <arg name="laser_visualize" default="false"/>
+  <arg name="odomsource" default="world"/>
   <arg name="camera_visualize" default="true"/>
   <!--arg name="worldfile" default="empty_rose.world" /-->
   <arg name="worldfile" default="jetbotSize.world" />
@@ -35,6 +36,7 @@
       <arg name="laser_visualize" value="$(arg laser_visualize)"/>
     <arg name="camera_visualize" value="$(arg camera_visualize)"/>
       <arg name="camera_xyz"  value="$(arg camera_xyz)"/>
+    <arg name="odomsource" value="$(arg odomsource)">
   <arg name="camera_rpy"  value="$(arg camera_rpy)"/>
   </include>
   

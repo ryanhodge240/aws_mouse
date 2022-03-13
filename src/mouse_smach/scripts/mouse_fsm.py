@@ -104,14 +104,14 @@ class Micromouse_Node(object):
     
     @smach.cb_interface(input_keys=['lspeed'], outcomes=['succeeded', 'IDEL', 'forward', 'left', 'right'])
     def cb_idel(user_data, self):
-    	if (user_data.lspeed <0.3):
+    	if (self.laser_sensors['f']<wall_distance_forward):
    	    return 'forward'
     	else:
    	    return 'IDEL'
 
     @smach.cb_interface(input_keys=['lspeed'], output_keys=[], outcomes=['succeeded'])
     def cb_forward(user_data, self):
-    	if (user_data.lspeed <0.3):
+    	if (self.laser_sensors['f']<wall_distance_forward):
     	    self.move_onecell(0.32)
     	    return 'succeeded'
    	    

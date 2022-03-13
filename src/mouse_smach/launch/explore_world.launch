@@ -1,0 +1,49 @@
+<!-- example of simulation run with SLAM -->
+
+<launch>
+  
+  <arg name="x" default="-2.25"/>
+  <arg name="y" default="2.23"/>
+  <arg name="z" default="0.03"/>
+  <arg name="R" default="0"/>
+  <arg name="P" default="0"/>
+  <arg name="Y" default="-1.57"/> 
+  <arg name="laser_visualize" default="false"/>
+  <arg name="odomsource" default="world"/>
+  <arg name="camera_visualize" default="true"/>
+  <!--arg name="worldfile" default="empty_rose.world" /-->
+  <arg name="worldfile" default="jetbotSize.world" />
+  <arg name="camera_xyz"  default="0.065   0      0.0857"/>
+  <arg name="camera_rpy"  default="0    0.25  0"/>
+  
+  <!-- Gazebo world loading -->
+  <include file="$(find maze_world)/launch/world.launch" >
+      <arg name="worldfile" value="$(arg worldfile)" />
+  </include> 
+
+  <!-- robot spawn -->
+  <include file="$(find jetbot_description)/launch/spawn.launch" >
+    <arg name="x" value="$(arg x)" /> 
+    <arg name="y" value="$(arg y)" /> 
+    <arg name="z" value="$(arg z)" /> 
+    <arg name="P" value="$(arg P)" /> 
+    <arg name="Y" value="$(arg Y)" /> 
+    <arg name="R" value="$(arg R)" /> 
+    </include>
+
+  <!-- rosbot description -->
+  <include file="$(find jetbot_description)/launch/jetbot_description.launch">
+      <arg name="laser_visualize" value="$(arg laser_visualize)"/>
+    <arg name="camera_visualize" value="$(arg camera_visualize)"/>
+      <arg name="camera_xyz"  value="$(arg camera_xyz)"/>
+    <arg name="odomsource" value="$(arg odomsource)"/>
+  <arg name="camera_rpy"  value="$(arg camera_rpy)"/>
+  </include>
+  
+  <!-- run SLAM -->
+  <!--include file="$(find jetbot_slam)/launch/jetbot_hector_slam.launch" /-->
+  <!--include file="$(find jetbot_navigation)/launch/jetbot_move_base.launch" /-->
+  
+  <!-- node name="rviz" pkg="rviz" type="rviz" args="-d $(find jetbot_description)/rviz/mapping_view.rviz" / -->
+  
+</launch>

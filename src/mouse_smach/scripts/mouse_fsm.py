@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from utils import Micromouse_Node
+from mouse_common.utils import Micromouse_Node
 import smach, smach_ros, rospy
 from smach import State, StateMachine,  CBState
 

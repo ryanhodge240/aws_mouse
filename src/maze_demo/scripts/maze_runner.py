@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import rospy
-from utils import Micromouse_Node
+from mouse_common.utils import Micromouse_Node
 
 wall_distance = 0.2
 wall_distance_forward = 0.15

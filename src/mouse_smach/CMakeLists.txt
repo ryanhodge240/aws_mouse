@@ -41,7 +41,7 @@ include_directories(
 #############
 ## Install ##
 #############
-catkin_install_python(PROGRAMS scripts/mouse_fsm.py  scripts/utils.py  scripts/maze_fsm.py 
+catkin_install_python(PROGRAMS scripts/mouse_fsm.py  scripts/utils.py  
        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # all install targets should use catkin DESTINATION variables

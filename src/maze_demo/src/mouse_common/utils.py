@@ -258,39 +258,11 @@ class Micromouse_Node(object):
         self._current_position.y = data_odom.pose.pose.position.y
         self._current_position.z = data_odom.pose.pose.position.z
         
-    def create_velocity_message(self, turn_left, turn_right, forward):
-        global laser_sensors, rotation_imu, foundHeading
-        angular = 0
-        linear = 0
 
-        if (turn_left):
-            #turn left based on current oritenation
-            angular = angular_vel
-            #linear = linear_vel*0.2
-        elif (turn_right):
-            angular = -angular_vel
-        # linear = linear_vel*0.2
-        elif (forward):
-            linear = linear_vel
-            angular = rotation_imu
-        vel_msg = Twist()
-        vel_msg.linear.x = linear
-        vel_msg.angular.z = angular
-        
-        turn =""
-        if (turn_left):
-            turn += "Turn Left| " 
-        if (turn_right):
-            turn += "Turn Right| " 
-        if (forward):
-            turn += "Forward  " 
-        
-    #    rospy.loginfo("Movement: linear %s angular %s - Direction %s ",linear, angular, turn)
+    def getFilePath(self,name ,folder="image"):
+        rospack = rospkg.RosPack()
+        return rospack.get_path(self.package) + "/" + folder + "/" + name  
 
-        return vel_msg
-
-
- 
     def read_param_from_file(self, file_name, file_folder):
         fname = self.getFilePath(name=file_name,folder=file_folder)
         with open(fname, 'r') as in_file:
@@ -375,36 +347,6 @@ class Micromouse_Node(object):
     	vel_msg.angular.z = 0
     	self.pub_msg.publish(vel_msg)
     	rate.sleep()
-
-    def turnaroundright(self):   
-    	global foundHeading, current_heading
-    	import math 
-    	forward = False
-    	turn_left = False
-    	turn_right = True
-    	t0 = rospy.Time.now().to_sec()
-    	current_angle = 0
-    	rate = rospy.Rate(2)
-    	
-    	while not rospy.is_shutdown():
-            vel_msg = self.create_velocity_message(turn_left, turn_right, forward)
-            self.pub_msg.publish(vel_msg)
-            t1=rospy.Time.now().to_sec()
-            current_angle= angular_vel *(t1-t0)
-            print('>pose[{} : {}]>>>turnnnnning around {}'.format(self.yaw_imu, current_angle, self.laser_sensors['f']))
-
-            if (self.yaw_imu-current_heading> 6.28):
-            	foundHeading = False   # updated heading after the rotation
-            	break
-            rate.sleep()
-    	print(current_angle, self.laser_sensors['f'])
-
-    	vel_msg = Twist()
-    	vel_msg.angular.z = 0
-    	self.pub_msg.publish(vel_msg)
-    	rate.sleep()
-
-    	    	
 
 
     def on_shutdown(self): 

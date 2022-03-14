@@ -1,4 +1,4 @@
-In img_recognition/model/ folder, you will see the recording.yaml and two deep learning nernual network models generated from AWS SageMaker (pytorchimage)
+In img_recognition/model/ folder, you will see the recording.yaml and two deep learning nernual network models generated from AWS SageMaker (https://github.com/lbaitemple/pytorchimage)
 
 In the recording.yaml file, you see line 1 (flower.pth) and line 23 (flower_pretrainm2_gpu.pth)
 

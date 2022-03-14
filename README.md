@@ -51,7 +51,7 @@ roslaunch maze_demo explore_world.launch camera_visualize:=true
 
 ```
 source install/setup.bash
-rosrun maze_demo node_follow_wall2.py
+rosrun maze_demo maze_runner.py
 ```
 
 ### running deep learning inferencing

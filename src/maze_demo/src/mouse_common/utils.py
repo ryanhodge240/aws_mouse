@@ -306,7 +306,7 @@ class Micromouse_Node(object):
 		          laser_sensors['fr'], laser_sensors['r'])
 
 
-    def turnleft(self):   
+    def turnleft(self, target = 90):   
     	global foundHeading, current_heading
     	import math 
     	forward = False
@@ -316,7 +316,7 @@ class Micromouse_Node(object):
     	current_angle = 0
     	rate = rospy.Rate(2)
     	kp=0.5
-    	target = 90
+    	
     	target_rad = self.pi_to_pi(target* math.pi/180 + current_heading)   # current heading add 90 degree
     	self.prev_yaw_imu =target_rad  #90
   	

@@ -9,12 +9,14 @@ project(mouse_smach)
 ###########################################################################
 ## Find catkin packages and libraries for catkin and system dependencies ##
 ###########################################################################
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+   rospy
+)
 
 ##########################################
 ## Setup for python modules and scripts ##
 ##########################################
-# catkin_python_setup()
+#catkin_python_setup()
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
@@ -41,7 +43,7 @@ include_directories(
 #############
 ## Install ##
 #############
-catkin_install_python(PROGRAMS scripts/mouse_fsm.py  scripts/utils.py  
+catkin_install_python(PROGRAMS scripts/mouse_fsm.py  
        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # all install targets should use catkin DESTINATION variables

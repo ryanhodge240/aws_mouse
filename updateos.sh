@@ -11,8 +11,18 @@ then
 fi
 
 # install torch
-pip install torch torchvision  future
-python -m pip install --upgrade Pillow
+# install torch
+var="$(lsb_release -sr)"
+if [ $var = "18.04" ]; then
+    pip install torch torchvision  future
+    python -m pip install --upgrade Pillow
+fi
+
+if [ $var = "20.04" ]; then
+    pip3 install torch torchvision  future
+    python3 -m pip install --upgrade Pillow
+fi
+
 echo "export VEHICLE_NAME=''" >> ~/.bashrc
 
 # update cmake   

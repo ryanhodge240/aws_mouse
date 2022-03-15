@@ -299,12 +299,8 @@ class Micromouse_Node(object):
     def turnleft(self, target = 90):   
     	global foundHeading, current_heading
     	import math 
-    	forward = False
-    	turn_left = True
-    	turn_right = False
-    	t0 = rospy.Time.now().to_sec()
     	current_angle = 0
-    	rate = rospy.Rate(2)
+    	rate = rospy.Rate(20)
     	kp=0.5
     	
     	target_rad = self.pi_to_pi(target* math.pi/180 + current_heading)   # current heading add 90 degree
@@ -331,41 +327,6 @@ class Micromouse_Node(object):
     	self.pub_msg.publish(vel_msg)
     	rate.sleep()
     	
-    def turnright(self):   
-    	global foundHeading, current_heading
-    	import math 
-    	forward = False
-    	turn_left = True
-    	turn_right = False
-    	t0 = rospy.Time.now().to_sec()
-    	current_angle = 0
-    	rate = rospy.Rate(2)
-    	kp=0.5
-    	target = -90
-    	target_rad = self.pi_to_pi(target* math.pi/180 + current_heading)   # current heading add 90 degree
-    	self.prev_yaw_imu =target_rad  #-90
-  	
-    	while not rospy.is_shutdown():
-            if (abs(self.prev_yaw_imu-self.yaw_imu)<0.01):
-             	foundHeading = False   # updated heading after the rotation
-             	break;
-    	
-            vel_msg = Twist()
-            vel_msg.angular.z = kp *(target_rad -self.yaw_imu)
-            self.pub_msg.publish(vel_msg)
-
-            print('>pose[{:.3f} ]>target_heading {:.3f}'.format(self.yaw_imu, target_rad))
-            #self.prev_yaw_imu=self.yaw_imu
-
-
-            rate.sleep()
-    	print(current_angle, self.laser_sensors['f'])
-
-    	vel_msg = Twist()
-    	vel_msg.angular.z = 0
-    	self.pub_msg.publish(vel_msg)
-    	rate.sleep()
-
 
     def on_shutdown(self): 
         rospy.loginfo("[{}] Close.".format(self.node_name))

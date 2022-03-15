@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os, sys, argparse, errno, yaml, time, datetime
-import rospy
+import rospy,rospkg
 import math
 import numpy as np
 from math import cos, sin

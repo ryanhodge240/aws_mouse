@@ -277,6 +277,24 @@ class Micromouse_Node(object):
 	     laser_sensors['l'], laser_sensors['fl'], laser_sensors['f'],
 		          laser_sensors['fr'], laser_sensors['r'])
 
+    def turnangle(self, target = 90):  
+        if (target > 90):
+            n = target/90
+            print(n)
+            r = target%90
+            for i in range(0, n):
+                self.turnleft(90)
+            if (r>0):
+                self.turnleft(r)
+        elif (target < -90):
+            n = abs(target)/90
+            r = -abs(target)%90
+            for i in range(0, n):
+                self.turnleft(-90)
+            if (r<0):
+                self.turnleft(r)
+        else:
+            self.turnleft(target)
 
     def turnleft(self, target = 90):   
     	global foundHeading, current_heading

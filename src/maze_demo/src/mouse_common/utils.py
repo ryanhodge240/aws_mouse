@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os, sys, argparse, errno, yaml, time, datetime
-import rospy,rospkg
+import rospy, rospkg
 import math
 import numpy as np
 from math import cos, sin
@@ -298,7 +298,7 @@ class Micromouse_Node(object):
              	break;
     	
             vel_msg = Twist()
-            vel_msg.angular.z = kp *(target_rad -self.yaw_imu)
+            vel_msg.angular.z = kp *self.pi_to_pi(target_rad -self.yaw_imu)
             self.pub_msg.publish(vel_msg)
 
             print('>pose[{:.3f} ]>target_heading {:.3f}'.format(self.yaw_imu, target_rad))

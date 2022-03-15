@@ -277,26 +277,26 @@ class Micromouse_Node(object):
 	     laser_sensors['l'], laser_sensors['fl'], laser_sensors['f'],
 		          laser_sensors['fr'], laser_sensors['r'])
 
-    def turnangle(self, target = 90):  
+    def turnangle(self, target = 90, DEBUG=False):  
         if (target > 90):
             n = target/90
             print(n)
             r = target%90
             for i in range(0, n):
-                self.turnleft(90)
+                self.turnleft(90, DEBUG)
             if (r>0):
-                self.turnleft(r)
+                self.turnleft(r, DEBUG)
         elif (target < -90):
             n = abs(target)/90
             r = -abs(target)%90
             for i in range(0, n):
-                self.turnleft(-90)
+                self.turnleft(-90, DEBUG)
             if (r<0):
-                self.turnleft(r)
+                self.turnleft(r, DEBUG)
         else:
-            self.turnleft(target)
+            self.turnleft(target, DEBUG)
 
-    def turnleft(self, target = 90):   
+    def turnleft(self, target = 90, DEBUG=False):   
     	global foundHeading, current_heading
     	import math 
     	current_angle = 0
@@ -314,13 +314,14 @@ class Micromouse_Node(object):
             vel_msg = Twist()
             vel_msg.angular.z = kp *self.pi_to_pi(target_rad -self.yaw_imu)
             self.pub_msg.publish(vel_msg)
-
-            print('>pose[{:.3f} ]>target_heading {:.3f}'.format(self.yaw_imu, target_rad))
+            if (DEBUG):
+                print('>pose[{:.3f} ]>target_heading {:.3f}'.format(self.yaw_imu, target_rad))
             #self.prev_yaw_imu=self.yaw_imu
 
-
             rate.sleep()
-    	print(current_angle, self.laser_sensors['f'])
+            
+    	if (DEBUG):
+    	    print(current_angle, self.laser_sensors['f'])
 
     	vel_msg = Twist()
     	vel_msg.angular.z = 0

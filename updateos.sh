@@ -15,11 +15,13 @@ fi
 var="$(lsb_release -sr)"
 if [ $var = "18.04" ]; then
     pip install torch torchvision  future
+    sudo apt-get install python-numpy
     python -m pip install --upgrade Pillow
 fi
 
 if [ $var = "20.04" ]; then
     pip3 install torch torchvision  future
+    sudo apt-get install python3-numpy
     python3 -m pip install --upgrade Pillow
 fi
 

@@ -53,7 +53,10 @@ roslaunch maze_demo explore_world.launch camera_visualize:=true
 source install/setup.bash
 rosrun maze_demo maze_runner.py
 ```
-
+### or choose a different position or pose
+```
+roslaunch maze_demo explore_world.launch x:=-0.75 y:=-2.25 Y:=0.00
+```
 ### running deep learning inferencing
 #### open another terminal 
 ##### to run the classifier using deep learning neural network

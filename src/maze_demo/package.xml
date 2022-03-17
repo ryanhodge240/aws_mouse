@@ -11,7 +11,6 @@
   <author email="aws-robomaker@amazon.com">AWS RoboMaker</author>
   <maintainer email="aws-robomaker@amazon.com">AWS RoboMaker</maintainer>
   <buildtool_depend>catkin</buildtool_depend>
-  <run_depend>python-numpy</run_depend>
-  <exec_depend>rospy</exec_depend>
+   <exec_depend>rospy</exec_depend>
 
 </package>

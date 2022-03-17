@@ -69,7 +69,7 @@ class Micromouse_Node(object):
 
         # configure Publisher
         self.pub_msg = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-        self.laser_sensors = {'l': 0, 'fl': 0, 'f': 0, 'fr': 0, 'r': 0}
+        self.laser_sensors = {'left': 0, 'frontleft': 0, 'front': 0, 'frontright': 0, 'right': 0}
 
         while (not self.laser_ready):
             time.sleep(1)
@@ -87,7 +87,7 @@ class Micromouse_Node(object):
             if self.laser_sensors is not None:
             	vel_msg = self.follow_right_wall()
             	self.pub_msg.publish(vel_msg)
-            	if (self.laser_sensors['f']<wall_distance_forward):
+            	if (self.laser_sensors['front']<wall_distance_forward):
             	    break
             	if (self._mved_distance.data >distance):
             	    break
@@ -124,8 +124,8 @@ class Micromouse_Node(object):
 
         theta = 45;
         desired_trajectory =0.14
-        a = self.laser_sensors['fr']
-        b = self.laser_sensors['r']
+        a = self.laser_sensors['frontright']
+        b = self.laser_sensors['right']
         swing = math.radians(theta)
         ABangle = math.atan2( a * math.cos(swing) - b , a * math.sin(swing))
         AB = b * math.cos(ABangle)
@@ -138,7 +138,7 @@ class Micromouse_Node(object):
         diff = 0
         output = -kp*error # - ki*integ - kd*diff
         msg.linear.x = AC
-#        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['l'], self.laser_sensors['r']))
+#        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['left'], self.laser_sensors['right']))
         msg.angular.z =  output
 
 
@@ -185,7 +185,7 @@ class Micromouse_Node(object):
         '''Dynamic range intervals'''        
 
         half_pi = np.pi / 2
-        laser_sensors = {'l': 0, 'fl': 0, 'f': 0, 'fr': 0, 'r': 0}
+        laser_sensors = {'left': 0, 'frontleft': 0, 'front': 0, 'frontright': 0, 'right': 0}
         initial_angle = 0  
         final_angle = 0   
         if data.angle_min < -half_pi:
@@ -211,11 +211,11 @@ class Micromouse_Node(object):
             ):int(initial_angle + i * laser_interval + half_laser_interval) + 1]
             interval[i] = min(np.mean(np.nan_to_num(dirty_values)), 8.0)
 
-        laser_sensors['r'] = interval[0]
-        laser_sensors['fr'] = interval[1]
-        laser_sensors['f'] = interval[2]
-        laser_sensors['fl'] = interval[3]
-        laser_sensors['l'] = interval[4]
+        laser_sensors['right'] = interval[0]
+        laser_sensors['frontright'] = interval[1]
+        laser_sensors['front'] = interval[2]
+        laser_sensors['frontleft'] = interval[3]
+        laser_sensors['left'] = interval[4]
         self.laser_ready=True
 
         self.laser_sensors = laser_sensors
@@ -274,8 +274,8 @@ class Micromouse_Node(object):
 
     def log_info(self, laser_sensors):
         rospy.loginfo("Left  : %s, Front Left: %s, Front : %s, Front Right: %s, Right : %s", 
-	     laser_sensors['l'], laser_sensors['fl'], laser_sensors['f'],
-		          laser_sensors['fr'], laser_sensors['r'])
+	     laser_sensors['left'], laser_sensors['frontleft'], laser_sensors['front'],
+		          laser_sensors['frontright'], laser_sensors['right'])
 
     def turnangle(self, target = 90, DEBUG=False):  
         if (target > 90):
@@ -321,7 +321,7 @@ class Micromouse_Node(object):
             rate.sleep()
             
     	if (DEBUG):
-    	    print(current_angle, self.laser_sensors['f'])
+    	    print(current_angle, self.laser_sensors['front'])
 
     	vel_msg = Twist()
     	vel_msg.angular.z = 0

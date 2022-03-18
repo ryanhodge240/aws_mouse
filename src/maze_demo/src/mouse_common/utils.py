@@ -56,7 +56,7 @@ class Micromouse_Node(object):
         # configure subscriber
         self.first_sub = True
         self.sub_msg = rospy.Subscriber("/scan", LaserScan, self.calculate_lasers_range, queue_size=1)        
-        self.sub_imumsg = rospy.Subscriber("/imu", Imu, self.clbk_imu, queue_size=1)
+        # self.sub_imumsg = rospy.Subscriber("/imu", Imu, self.clbk_imu, queue_size=1)
         self.sub_odommsg = rospy.Subscriber("/odom", Odometry, self.odom_callback)
     	#subscribe to predication topic
         rospy.Subscriber("/prediction", Prediction, self.clbk_prediction)
@@ -77,24 +77,34 @@ class Micromouse_Node(object):
     def getPredication(self):
         return self.label
 
-    def move_onecell(self, distance):
+    def move_onecell(self, distance=0.3, kp = 111, DEBUG = False):
+    
     	rate = rospy.Rate(30)
-
+    	
     	self._mved_distance.data = 0.0
     	self.get_init_position()
+    	
+    	if distance < 0.0:
+    	    mv_forward = False
+    	else:
+    	    mv_forward = True
     	      
     	while not rospy.is_shutdown():
             if self.laser_sensors is not None:
-            	vel_msg = self.follow_right_wall()
+            	vel_msg = self.follow_right_wall(mv_forward, desired_dist = 0.14, kp = 111)
+            	#vel_msg = self.follow_both_wall(mv_forward, desired_dist = 0.14, kp=kp)
             	self.pub_msg.publish(vel_msg)
             	if (self.laser_sensors['front']<wall_distance_forward):
             	    break
-            	if (self._mved_distance.data >distance):
+            	if (self._mved_distance.data >abs(distance)):
             	    break
             	rate.sleep()
     	vel_msg = Twist()
     	vel_msg.linear.x = 0
     	self.pub_msg.publish(vel_msg)
+    	if (DEBUG):
+    	    print("distance travelled {:.3f}".format(self._mved_distance.data))
+    	    
     	return self._mved_distance.data
 
     def clbk_prediction(self, data):
@@ -116,29 +126,100 @@ class Micromouse_Node(object):
             self.label = "ROS is down"
             return None
 
-    def follow_right_wall(self):
-        global kp,ki,kd
-        kp =  111
+    def follow_right_wall(self, mv_forward, desired_dist = 0.14, kp = 111):
+        #kp =  111
         ki = 0
         kd = 0
 
         theta = 45;
-        desired_trajectory =0.14
+        sign = 1
+        
+        if mv_forward is True:
+            AC = 0.2
+        else:
+            AC = -0.2
+            sign=-1
+        
+        #desired_trajectory =0.14
+        
+        
         a = self.laser_sensors['frontright']
+        #if self.laser_sensors['r'] > 0.3 and self.laser_sensors['fr'] < 0.3:
+        #    print(" no wall left")
+        #    b = a
+        #else:
+        #    b = self.laser_sensors['r']
         b = self.laser_sensors['right']
         swing = math.radians(theta)
-        ABangle = math.atan2( a * math.cos(swing) - b , a * math.sin(swing))
+        ABangle = sign*math.atan2( a * math.cos(swing) - b , a * math.sin(swing))
         AB = b * math.cos(ABangle)
-        AC = 0.2     # how much the car moves in one time shot or linear.x in twist message
+        # AC = 0.2     # how much the car moves in one time shot or linear.x in twist message
         CD = AB + AC * math.sin(ABangle)
-        error = CD - desired_trajectory
+        error = CD - desired_dist
 
         msg = Twist()
         integ = 0
         diff = 0
         output = -kp*error # - ki*integ - kd*diff
         msg.linear.x = AC
-#        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['left'], self.laser_sensors['right']))
+#        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['l'], self.laser_sensors['r']))
+        msg.angular.z =  output
+
+
+        return msg
+        
+        
+    def follow_both_wall(self, mv_forward, desired_dist = 0.14, kp = 111):
+        #kp =  111
+        ki = 0
+        kd = 0
+
+        theta = 45;
+        
+        if mv_forward is True:
+            AC = 0.2
+        else:
+            AC = -0.2
+        
+        #desired_trajectory =0.14
+        
+        
+        a = self.laser_sensors['frontright']
+        b = self.laser_sensors['right']
+        c = self.laser_sensors['left']
+        d = self.laser_sensors['frontleft']
+        #if self.laser_sensors['r'] > 0.3 and self.laser_sensors['fr'] < 0.3:
+        #    print(" no wall left")
+        #    b = a
+        #else:
+        #    b = self.laser_sensors['r']
+        swing = math.radians(theta)
+        ABangle = math.atan2( a * math.cos(swing) - b , a * math.sin(swing))
+        AB = b * math.cos(ABangle)
+        # AC = 0.2     # how much the car moves in one time shot or linear.x in twist message
+        CDr = b * math.cos(ABangle) + AC * math.sin(ABangle)
+        CDl = c*math.cos(ABangle) - AC*math.sin(ABangle)
+        if b < 0.3 and c < 0.3: 
+            error = CDr - CDl
+        elif c < 0.3:
+            error = desired_dist - CDl
+        elif b < 0.3:
+            error = CDr - desired_dist
+        else:
+            error = 0
+        
+
+        msg = Twist()
+        integ = 0
+        diff = 0
+        #if a > c:
+        #    output = -kp*(a-c)
+        #else:
+        #    output = kp*(c-a)
+
+        output = -kp*error # - ki*integ - kd*diff
+        msg.linear.x = AC
+#        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['l'], self.laser_sensors['r']))
         msg.angular.z =  output
 
 
@@ -152,9 +233,23 @@ class Micromouse_Node(object):
 
     def odom_callback(self, msg):
         """Process odometry data sent by the subscriber."""
+        global rotation_odom, current_heading, foundHeading
         # Get the position information from the odom message
         # See the structure of an /odom message in the `get_init_position` function
         NewPosition = msg.pose.pose.position
+        NewOrientation = msg.pose.pose.orientation
+        
+        # Calculate the orientatiom from odom
+        orientation_odom = [NewOrientation.x, NewOrientation.y, NewOrientation.z, NewOrientation.w]
+        (self.roll_odom, self.pitch_odom, self.yaw_odom) = euler_from_quaternion (orientation_odom)
+        self.yaw_odom = self.pi_to_pi(self.yaw_odom)
+        
+        # Update curent heading
+        if (not foundHeading):
+            current_heading = self.yaw_odom
+            foundHeading = True
+        Kp=38
+        rotation_odom =  Kp*(current_heading-self.yaw_odom)
 
         # Calculate the new distance moved, and add it to _mved_distance and 
         if (self._current_position !=None):
@@ -221,18 +316,18 @@ class Micromouse_Node(object):
         self.laser_sensors = laser_sensors
 
 
-    def clbk_imu(self, msg):
-        global rotation_imu, current_heading, foundHeading
-        orientation_q = msg.orientation
-        orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
-        (self.roll_imu, self.pitch_imu, self.yaw_imu) = euler_from_quaternion (orientation_list)
-        self.yaw_imu = self.pi_to_pi(self.yaw_imu)
+    #def clbk_imu(self, msg):
+        #global rotation_imu, current_heading, foundHeading
+        #orientation_q = msg.orientation
+        #orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
+        #(self.roll_imu, self.pitch_imu, self.yaw_imu) = euler_from_quaternion (orientation_list)
+        # self.yaw_imu = self.pi_to_pi(self.yaw_imu)
         
-        if (not foundHeading):
-            current_heading = self.yaw_imu
-            foundHeading = True
-        Kp=38
-        rotation_imu =  Kp*(current_heading-self.yaw_imu)
+        #if (not foundHeading):
+         #   current_heading = self.yaw_imu
+          #  foundHeading = True
+        #Kp=38
+        #rotation_imu =  Kp*(current_heading-self.yaw_imu)
         
     def pi_to_pi(self, angle):
         angle = np.mod(angle, (2*np.pi))
@@ -279,45 +374,45 @@ class Micromouse_Node(object):
 
     def turnangle(self, target = 90, DEBUG=False):  
         if (target > 90):
-            n = target/90
-            print(n)
-            r = target%90
-            for i in range(0, n):
+            q = np.divmod(target,90)
+            for i in range(0, q[0]):
                 self.turnleft(90, DEBUG)
-            if (r>0):
-                self.turnleft(r, DEBUG)
+            if (q[1]>0):
+                self.turnleft(q[1], DEBUG)
         elif (target < -90):
-            n = abs(target)/90
-            r = -abs(target)%90
-            for i in range(0, n):
+            q = np.divmod(abs(target),90)
+            q[1] = -q[1]
+            for i in range(0, q[0]):
                 self.turnleft(-90, DEBUG)
-            if (r<0):
-                self.turnleft(r, DEBUG)
+            if (q[1]<0):
+                self.turnleft(q[1], DEBUG)
         else:
             self.turnleft(target, DEBUG)
 
-    def turnleft(self, target = 90, DEBUG=False):   
+    def turnleft(self, target=90, DEBUG=False):   
     	global foundHeading, current_heading
     	import math 
     	current_angle = 0
     	rate = rospy.Rate(20)
     	kp=0.5
     	
-    	target_rad = self.pi_to_pi(target* math.pi/180 + current_heading)   # current heading add 90 degree
-    	self.prev_yaw_imu =target_rad  #90
-  	
+    	target_rad = self.pi_to_pi(np.radians(target)+current_heading)  # (target* math.pi/180)   # current heading add 90 degree
+    	cnt=0
     	while not rospy.is_shutdown():
-            if (abs(self.prev_yaw_imu-self.yaw_imu)<0.01):
+            if (abs(target_rad-self.yaw_odom)<0.01):
              	foundHeading = False   # updated heading after the rotation
              	break;
-    	
-            vel_msg = Twist()
-            vel_msg.angular.z = kp *self.pi_to_pi(target_rad -self.yaw_imu)
-            self.pub_msg.publish(vel_msg)
-            if (DEBUG):
-                print('>pose[{:.3f} ]>target_heading {:.3f}'.format(self.yaw_imu, target_rad))
+            if (self.laser_sensors['frontright']<0.08 or self.laser_sensors['frontleft']<0.08):
+                rospy.loginfo('Too close to wall, cannot rotate anymore')
+            else:
+             	vel_msg = Twist()
+             	vel_msg.angular.z = kp *self.pi_to_pi(target_rad -self.yaw_odom)
+             	self.pub_msg.publish(vel_msg)
+             	cnt = cnt + 1
+             	if (DEBUG and cnt%100==0):             	
+             	    print('>pose[{:.3f} ]>target_heading {:.3f}'.format(self.yaw_odom, target_rad))
+             	
             #self.prev_yaw_imu=self.yaw_imu
-
             rate.sleep()
             
     	if (DEBUG):

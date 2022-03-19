@@ -138,6 +138,7 @@ class Micromouse_Node(object):
             AC = 0.2
         else:
             AC = -0.2
+            kp=kp/10
             sign=-1
         
         #desired_trajectory =0.14
@@ -160,9 +161,12 @@ class Micromouse_Node(object):
         msg = Twist()
         integ = 0
         diff = 0
-        output = -kp*error # - ki*integ - kd*diff
+        output = -sign*kp*error # - ki*integ - kd*diff
         msg.linear.x = AC
+        #print("turning angle {:.3f}".format(output))
+
 #        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['l'], self.laser_sensors['r']))
+
         msg.angular.z =  output
 
 
@@ -221,7 +225,7 @@ class Micromouse_Node(object):
         msg.linear.x = AC
 #        print("output->:{:.3f} and left distance->: {:.3f}, current right distance->: {:.3f}".format(output, self.laser_sensors['l'], self.laser_sensors['r']))
         msg.angular.z =  output
-
+ #       print("turning angle {:.3f}".format(output))
 
         return msg
 
@@ -367,10 +371,10 @@ class Micromouse_Node(object):
                 print(" YAML syntax  error. File: {}".format(fname))
         return yaml_dict
 
-    def log_info(self, laser_sensors):
+    def log_info(self):
         rospy.loginfo("Left  : %s, Front Left: %s, Front : %s, Front Right: %s, Right : %s", 
-	     laser_sensors['left'], laser_sensors['frontleft'], laser_sensors['front'],
-		          laser_sensors['frontright'], laser_sensors['right'])
+	     self.laser_sensors['left'], self.laser_sensors['frontleft'], self.laser_sensors['front'],
+		          self.laser_sensors['frontright'], self.laser_sensors['right'])
 
     def turnangle(self, target = 90, DEBUG=False):  
         if (target > 90):

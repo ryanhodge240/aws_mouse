@@ -104,8 +104,21 @@ class MazeRunner(object):
                 print('back')
                 mn.turnangle(target = 180)
 
+def listeners():
+    # subscribe and read scan message, check laser_callback function
+    rospy.Subscriber('/scan', LaserScan, laser_callback)
+    # subscribe imu message (oritenation of the robot)
+    rospy.Subscriber(imu_callback)
+    #subscribe to predication topic
+    rospy.Subscriber("/prediction", Prediction, prediction_callback)
+   
+    rospy.spin()
+
+
 # Run the MazeRunner
 if __name__ == "__main__" :
-    mr = MazeRunner()  
+    rospy.init_node('avoid_wall_1', anonymous=True)
+    listeners()
+    mr = MazeRunner()
     
     

@@ -1,11 +1,9 @@
-flower.pth:
+turtle.pth:
   build_time: 2021-02-23-15-36-15
   labels:
-    daisy: 0
-    sunflower: 1 
-    dandelion: 2
-    tulip: 3
-    rose: 4
+    Donatello: 0
+    Leonardo: 1
+    Michelangelo: 2
   loader:
     batch_size: 8
     num_workers: 0
@@ -20,14 +18,12 @@ flower.pth:
     train_time: 194.45
     use_cuda: false
     gpu_model: false
-flower_pretrainm2_gpu.pth:
+turtle_pretrainm2_gpu.pth:
   build_time: 2021-02-23-15-36-15
   labels:
-    daisy: 0
-    sunflower: 1 
-    dandelion: 2
-    tulip: 3
-    rose: 4
+    Donatello: 0
+    Leonardo: 1
+    Michelangelo: 2
   loader:
     batch_size: 8
     num_workers: 0

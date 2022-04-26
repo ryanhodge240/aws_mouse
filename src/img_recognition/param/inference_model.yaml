@@ -1,2 +1,2 @@
-model_pth: flower_pretrainm2_gpu.pth
+model_pth: turtle.pth
 use_cuda: false

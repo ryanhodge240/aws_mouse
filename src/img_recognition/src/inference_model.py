@@ -81,9 +81,9 @@ class Inference_Model_Node(object):
             start_time = rospy.get_time()
             self.modelname = model
             if model == "custom":
-                self.model = SimpleNet(num_classes=5)
+                self.model = SimpleNet(num_classes=3)
             elif model == "pretrained":
-                self.model = PretrainedNet(num_classes=5)
+                self.model = PretrainedNet(num_classes=3)
             elif model == "resnet18":
                 self.model = torchvision.models.resnet18(pretrained=param_pretrained)
                 self.model.fc = torch.nn.Linear(512,kind_of_classifier)

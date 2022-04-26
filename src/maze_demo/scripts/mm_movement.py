@@ -23,8 +23,8 @@ current_heading = 0
 orbit = 0
 laser_sensors = {'l': 0, 'fl': 0, 'f': 0, 'fr': 0, 'r': 0}
 
-linear_vel = 0.2
-angular_vel = 0.2
+linear_vel = 0.3
+angular_vel = 0.5
 wall_distance = 0.2
 wall_distance_forward = 0.30
 wall_distance_side = 0.15
@@ -51,6 +51,8 @@ wall_distance_side = 0.1
 
 def is_within_tolerance(num1, num2, tolerance):
     '''Check if the first number is within a specified tolerance of another'''
+    print('Target: ', num1, ' Val:', num2)
+    print(abs(num1 - num2) < tolerance)
     return abs(num1 - num2) < tolerance
 
 def calculate_lasers_range(data):
@@ -101,21 +103,25 @@ def get_velocity_message(turn_left, turn_right, move_forward, turn_around):
     turn =""
     target_complete = True
     is_turning = True
+    angular_veloity = 0
 
-    if turn_left:
-    	#turn left based on current oritenation
-        target_angle = rotation_imu + 1.57
-        turn += "Turn Left | "
-        target_complete = False
     if turn_right:
-        target_angle = rotation_imu - 1.57
+        angular_veloity = -angular_vel
+        target_angle = rotation_imu + 90
         turn += "Turn Right | "
         target_complete = False
-    if turn_around:
-        target_angle = rotation_imu + 3.14
+    elif turn_left:
+    	#turn left based on current oritenation
+        angular_veloity = angular_vel
+        target_angle = rotation_imu - 90
+        turn += "Turn Left | "
+        target_complete = False
+    elif turn_around:
+        angular_veloity = angular_vel
+        target_angle = rotation_imu - 180
         turn += "Turn Around | "
         target_complete = False
-    if move_forward:
+    elif move_forward:
         is_turning = False
         linear_velocity = linear_vel
         target_angle = rotation_imu
@@ -125,13 +131,13 @@ def get_velocity_message(turn_left, turn_right, move_forward, turn_around):
     vel_msg.linear.x = linear_velocity
     vel_msg.angular.z = target_angle
 
-    rospy.loginfo("Movement: linear %s angular %s - Direction %s ", linear_velocity, target_angle, turn)
+    # rospy.loginfo("Movement: linear %s angular %s - Direction %s ", linear_velocity, target_angle, turn)
 
     return vel_msg
 
 def laser_callback(laser_msg):
     '''Callback function for receiving laser messages to publish velocity messages'''
-    global laser_sensors, target_complete, is_turning
+    global laser_sensors, target_complete, is_turning, target_angle
     turn_left = False
     turn_right = False
     move_forward = False
@@ -139,7 +145,7 @@ def laser_callback(laser_msg):
 
     calculate_lasers_range(laser_msg)
 
-    if is_turning and is_within_tolerance(target_angle, rotation_imu, 0.1):
+    if is_within_tolerance(target_angle, rotation_imu, 4):
         target_complete = True
         is_turning = False
 
@@ -165,7 +171,12 @@ def laser_callback(laser_msg):
 def imu_callback(imu_msg):
     '''Callback used for the IMU sensor'''
     global rotation_imu, current_heading, foundHeading
-    global roll_imu, pitch_imu, yaw_imu
+    global roll_imu, pitch_imu, yaw_imu, is_turning, target_complete, target_angle
+    
+    # if is_turning and is_within_tolerance(target_angle, rotation_imu, 0.3):
+    #     target_complete = True
+    #     is_turning = False
+    
     orientation_q = imu_msg.orientation
     orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
     (roll_imu, pitch_imu, yaw_imu) = euler_from_quaternion(orientation_list)
@@ -174,7 +185,7 @@ def imu_callback(imu_msg):
         foundHeading = True
     Kp=38
     rotation_imu =  Kp*(current_heading-yaw_imu)
-    print(" \n IMU yaw: ", yaw_imu)
+    # print(" \n IMU yaw: ", yaw_imu)
 
 def prediction_callback(prediction):
     '''Callback used for the prediction algorithm'''

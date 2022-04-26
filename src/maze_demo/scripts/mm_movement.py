@@ -15,7 +15,11 @@ from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 np.set_printoptions(precision=2)
 foundHeading = False
-current_heading =0
+target_complete = True
+target_angle = 0
+is_turning = False
+
+current_heading = 0
 orbit = 0
 laser_sensors = {'l': 0, 'fl': 0, 'f': 0, 'fr': 0, 'r': 0}
 
@@ -44,6 +48,10 @@ wall_distance_forward = 0.15
 
 # Allowable Distance to Stop Moving in Other Directions
 wall_distance_side = 0.1
+
+def is_within_tolerance(num1, num2, tolerance):
+    '''Check if the first number is within a specified tolerance of another'''
+    return abs(num1 - num2) < tolerance
 
 def calculate_lasers_range(data):
     '''Dynamic range intervals'''
@@ -85,55 +93,73 @@ def calculate_lasers_range(data):
     laser_sensors['fl'] = interval[3]
     laser_sensors['l'] = interval[4]
 
-def get_velocity_message(turn_left, turn_right, move_forward):
+def get_velocity_message(turn_left, turn_right, move_forward, turn_around):
     '''Take in instructions for the type of velocity to put on the robot'''
-    global laser_sensors, rotation_imu, foundHeading
-    angular = 0
-    linear = 0
+    global laser_sensors, rotation_imu, foundHeading, target_complete, target_angle, is_turning
+    target_angle = 0
+    linear_velocity = 0
     turn =""
+    target_complete = True
+    is_turning = True
 
     if turn_left:
     	#turn left based on current oritenation
-        angular = rotation_imu + 1.57
-        foundHeading = False  # need to update heading
+        target_angle = rotation_imu + 1.57
         turn += "Turn Left | "
-        #linear = linear_vel*0.2
+        target_complete = False
     if turn_right:
-        angular = rotation_imu -1.57
+        target_angle = rotation_imu - 1.57
         turn += "Turn Right | "
-       # linear = linear_vel*0.2
+        target_complete = False
+    if turn_around:
+        target_angle = rotation_imu + 3.14
+        turn += "Turn Around | "
+        target_complete = False
     if move_forward:
-        linear = linear_vel
-        angular = rotation_imu
+        is_turning = False
+        linear_velocity = linear_vel
+        target_angle = rotation_imu
         turn += "Move Forward   "
 
     vel_msg = Twist()
-    vel_msg.linear.x = linear
-    vel_msg.angular.z = angular
+    vel_msg.linear.x = linear_velocity
+    vel_msg.angular.z = target_angle
 
-    rospy.loginfo("Movement: linear %s angular %s - Direction %s ",linear, angular, turn)
+    rospy.loginfo("Movement: linear %s angular %s - Direction %s ", linear_velocity, target_angle, turn)
 
     return vel_msg
 
 def laser_callback(laser_msg):
     '''Callback function for receiving laser messages to publish velocity messages'''
-    global laser_sensors
+    global laser_sensors, target_complete, is_turning
     turn_left = False
     turn_right = False
     move_forward = False
+    turn_around = False
 
     calculate_lasers_range(laser_msg)
 
-    if laser_sensors['r'] > turn_distance:
-        turn_right = True
-    if laser_sensors['f'] > wall_distance_forward:
-        move_forward = True
-    if laser_sensors['l'] > turn_distance:
-        turn_left = True
+    if is_turning and is_within_tolerance(target_angle, rotation_imu, 0.1):
+        target_complete = True
+        is_turning = False
 
-    vel_msg = get_velocity_message(turn_left, turn_right, move_forward)
-    vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-    vel_pub.publish(vel_msg)
+    if target_complete:
+        print('Target complete')
+
+        if laser_sensors['r'] > turn_distance:
+            turn_right = True
+        elif laser_sensors['f'] > wall_distance_forward:
+            move_forward = True
+        elif laser_sensors['l'] > turn_distance:
+            turn_left = True
+        else:
+            turn_around = True
+
+        vel_msg = get_velocity_message(turn_left, turn_right, move_forward, turn_around)
+
+        # Publish to the velocity msg
+        vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        vel_pub.publish(vel_msg)
 
 
 def imu_callback(imu_msg):

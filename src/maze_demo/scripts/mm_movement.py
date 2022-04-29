@@ -159,23 +159,17 @@ class MazeRunner(object):
         # Send out desired velocity
         self.vel_publisher.publish(self.follow_right_wall())
 
-    def follow_right_wall(self, mv_forward = True, desired_dist = 0.14, k_p = 111):
+    def follow_right_wall(self, desired_dist = 0.14, k_p = 111):
         '''Follow the right wall to keep straight *MAGIC*'''
         # pylint: disable=invalid-name
         theta = 45
         sign = 1
-
-        if mv_forward is True:
-            ac = LIN_VEL
-        else:
-            ac = -LIN_VEL
-            k_p=k_p/10
-            sign=-1
+        ac = LIN_VEL
 
         a = self.laser_sensors['fr']
         b = self.laser_sensors['r']
         swing = math.radians(theta)
-        ab_angle = sign*math.atan2( a * math.cos(swing) - b , a * math.sin(swing))
+        ab_angle = sign * math.atan2(a * math.cos(swing) - b, a * math.sin(swing))
         ab = b * math.cos(ab_angle)
 
         cd = ab + ac * math.sin(ab_angle)
@@ -187,6 +181,9 @@ class MazeRunner(object):
         msg.angular.z =  output
 
         return msg
+
+    def autocorrect(self):
+        '''Fix the angle to align best with both walls'''
 
 # Run the MazeRunner
 if __name__ == "__main__" :

@@ -43,7 +43,7 @@ include_directories(
 #############
 ## Install ##
 #############
-catkin_install_python(PROGRAMS scripts/maze_runner.py scripts/test_runner.py scripts/mm_movement.py scripts/mm_movement_copy.py
+catkin_install_python(PROGRAMS scripts/maze_runner.py scripts/test_runner.py scripts/mm_movement.py
        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # all install targets should use catkin DESTINATION variables

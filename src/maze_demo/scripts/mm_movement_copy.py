@@ -19,12 +19,11 @@ np.set_printoptions(precision = 2)
 
 # Minimum distance from walls on sides and in front
 WALL_DIST = 0.14
-FORWARD_WALL_DIST = 0.3
+FORWARD_WALL_DIST = 0.15
 
 # Normal linear and angular velocity speed
-LIN_VEL = 0.2
+LIN_VEL = 0.3
 ANG_VEL = 0.3
-ANG_CORRECTION_VEL = 0.2
 
 # The tolerance for turning (degrees)
 TOL = 4
@@ -39,7 +38,6 @@ class MazeRunner(object):
     def __init__(self):
         # Start Mouse Node
         self.found_heading = False
-        self.target_complete = True
         self.current_heading = 0
         self.laser_sensors = {'l': 0, 'fl': 0, 'f': 0, 'fr': 0, 'r': 0}
         self.rotation_imu = 0
@@ -133,11 +131,13 @@ class MazeRunner(object):
         self.vel_publisher.publish(vel_msg)
 
         # Wait for robot to reach the position
-        while not self.target_complete:
+        while True:
+            print('Start Angle: ', start_angle)
+            print('Angle: ', self.rotation_imu)
             if is_within_tolerance(start_angle + 90, self.rotation_imu, TOL):
-                self.target_complete = True
                 vel_msg = Twist()
                 self.vel_publisher.publish(vel_msg)
+                break
 
     def right(self):
         '''Turn the robot right'''

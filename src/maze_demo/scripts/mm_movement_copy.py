@@ -151,14 +151,17 @@ class MazeRunner(object):
         # Send out desired velocity
         vel_msg = Twist()
         vel_msg.angular.z = 0
-        print(self.laser_sensors['l'])
-
-        if self.laser_sensors['r'] < WALL_DIST:
-            # Turn left if too close to right wall
-            vel_msg.angular.z = ANG_CORRECTION_VEL
-        elif self.laser_sensors['l'] < WALL_DIST:
+        print('left: ', self.laser_sensors['l'])
+        print('right: ', self.laser_sensors['r'])
+            
+        if self.laser_sensors['r'] > self.laser_sensors['l']:
+            print('fix right')
             # Turn right if too close to left wall
             vel_msg.angular.z = -ANG_CORRECTION_VEL
+        else:
+            print('fix left')
+            # Turn left if too close to right wall
+            vel_msg.angular.z = ANG_CORRECTION_VEL
 
         vel_msg.linear.x = LIN_VEL
         self.vel_publisher.publish(vel_msg)

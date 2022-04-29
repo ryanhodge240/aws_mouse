@@ -5,7 +5,7 @@ from __future__ import division
 import sys
 import rospy
 import numpy as np
-from math import cos, sin
+import math
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Imu
 from sensor_msgs.msg import LaserScan
@@ -139,7 +139,6 @@ class MazeRunner(object):
                 vel_msg = Twist()
                 self.vel_publisher.publish(vel_msg)
 
-
     def right(self):
         '''Turn the robot right'''
 
@@ -149,22 +148,36 @@ class MazeRunner(object):
     def forward(self):
         '''Move the robot forward'''
         # Send out desired velocity
-        vel_msg = Twist()
-        vel_msg.angular.z = 0
-        print('left: ', self.laser_sensors['l'])
-        print('right: ', self.laser_sensors['r'])
-            
-        if self.laser_sensors['r'] > self.laser_sensors['l']:
-            print('fix right')
-            # Turn right if too close to left wall
-            vel_msg.angular.z = -ANG_CORRECTION_VEL
-        else:
-            print('fix left')
-            # Turn left if too close to right wall
-            vel_msg.angular.z = ANG_CORRECTION_VEL
+        self.vel_publisher.publish(self.follow_right_wall())
 
-        vel_msg.linear.x = LIN_VEL
-        self.vel_publisher.publish(vel_msg)
+    def follow_right_wall(self, mv_forward = True, desired_dist = 0.14, k_p = 111):
+        '''Follow the right wall to keep straight *MAGIC*'''
+        # pylint: disable=invalid-name
+        theta = 45
+        sign = 1
+
+        if mv_forward is True:
+            ac = LIN_VEL
+        else:
+            ac = -LIN_VEL
+            k_p=k_p/10
+            sign=-1
+
+        a = self.laser_sensors['fr']
+        b = self.laser_sensors['r']
+        swing = math.radians(theta)
+        ab_angle = sign*math.atan2( a * math.cos(swing) - b , a * math.sin(swing))
+        ab = b * math.cos(ab_angle)
+
+        cd = ab + ac * math.sin(ab_angle)
+        error = cd - desired_dist
+
+        msg = Twist()
+        output = -sign * k_p * error
+        msg.linear.x = ac
+        msg.angular.z =  output
+
+        return msg
 
 # Run the MazeRunner
 if __name__ == "__main__" :

@@ -185,7 +185,7 @@ def imu_callback(imu_msg):
         current_heading = yaw_imu
         foundHeading = True
     Kp=38
-    rotation_imu =  Kp*(current_heading-yaw_imu)
+    rotation_imu = Kp*(current_heading-yaw_imu)
     # print(" \n IMU yaw: ", yaw_imu)
 
 def prediction_callback(prediction):

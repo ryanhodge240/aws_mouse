@@ -13,7 +13,7 @@ from nav_msgs.msg import Odometry
 from img_recognition.msg import Prediction
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
-np.set_printoptions(precision=2)
+np.set_printoptions(precision = 2)
 foundHeading = False
 target_complete = True
 target_angle = 0
@@ -28,7 +28,7 @@ angular_vel = 0.5
 wall_distance = 0.2
 wall_distance_forward = 0.30
 wall_distance_side = 0.15
-rotation_imu =0
+rotation_imu = 0
 
 inf = float('inf')
 
@@ -51,7 +51,7 @@ wall_distance_side = 0.1
 
 def is_within_tolerance(num1, num2, tolerance):
     '''Check if the first number is within a specified tolerance of another'''
-    print('Target: ', num1, ' Val:', num2)
+    print('Target: ', num1, ' Val: ', num2)
     print(abs(num1 - num2) < tolerance)
     return abs(num1 - num2) < tolerance
 
@@ -59,8 +59,9 @@ def calculate_lasers_range(data):
     '''Dynamic range intervals'''
     global laser_sensors
     half_pi = np.pi / 2
-    initial_angle = 0  
-    final_angle = 0   
+    initial_angle = 0
+    final_angle = 0
+
     if data.angle_min < -half_pi:
         default_min_angle = half_pi / data.angle_increment
         robot_initial_angle = -data.angle_min / data.angle_increment
@@ -72,7 +73,7 @@ def calculate_lasers_range(data):
 
     laser_interval = (len(data.ranges) - initial_angle - final_angle) / 2
     half_laser_interval = laser_interval / 4
-    initial_angle = final_angle - 4*laser_interval
+    initial_angle = final_angle - 4 * laser_interval
 #    laser_interval = 45
 #    half_laser_interval = 22.5
 #    rospy.loginfo("\n\n=------> ref : %s %s  %s\n\n",final_angle, laser_interval,initial_angle)
@@ -100,7 +101,7 @@ def get_velocity_message(turn_left, turn_right, move_forward, turn_around):
     global laser_sensors, rotation_imu, foundHeading, target_complete, target_angle, is_turning
     target_angle = 0
     linear_velocity = 0
-    turn =""
+    turn = ""
     target_complete = True
     is_turning = True
     angular_veloity = 0

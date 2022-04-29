@@ -19,7 +19,7 @@ np.set_printoptions(precision = 2)
 
 # Minimum distance from walls on sides and in front
 WALL_DIST = 0.14
-FORWARD_WALL_DIST = 0.15
+FORWARD_WALL_DIST = 0.2
 
 # Normal linear and angular velocity speed
 LIN_VEL = 0.3
@@ -132,11 +132,11 @@ class MazeRunner(object):
 
         # Wait for robot to reach the position
         while True:
-            print('Start Angle: ', start_angle)
+            print('Target Angle: ', start_angle - 90)
             print('Angle: ', self.rotation_imu)
-            if is_within_tolerance(start_angle + 90, self.rotation_imu, TOL):
-                vel_msg = Twist()
-                self.vel_publisher.publish(vel_msg)
+            if is_within_tolerance(start_angle - 90, self.rotation_imu, TOL):
+                print('test turn complete\n\n\n\n')
+                self.vel_publisher.publish(Twist())
                 break
 
     def right(self):

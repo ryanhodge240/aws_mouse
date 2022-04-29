@@ -32,6 +32,17 @@ def is_within_tolerance(num1, num2, tolerance):
     '''Check if the first number is within a specified tolerance of another'''
     return abs(num1 - num2) < tolerance
 
+#TODO: Find out what this does
+def pi_to_pi(angle):
+    '''Convert somehting'''
+    angle = np.mod(angle, (2*np.pi))
+    if angle>np.pi:
+        angle = angle - (2*np.pi)
+    elif angle<(-np.pi):
+        angle = angle + (2*np.pi)
+        
+    return angle
+
 class MazeRunner(object):
     '''MazeRunner python class object for running the MicroMouse'''
 
@@ -41,6 +52,7 @@ class MazeRunner(object):
         self.current_heading = 0
         self.laser_sensors = {'l': 0, 'fl': 0, 'f': 0, 'fr': 0, 'r': 0}
         self.rotation_imu = 0
+        self.yaw_imu = 0
 
         # Initialize publisher
         self.vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
@@ -64,12 +76,12 @@ class MazeRunner(object):
         '''Callback used for the IMU sensor'''
         orientation_q = imu_msg.orientation
         orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
-        (_, _, yaw_imu) = euler_from_quaternion(orientation_list)
+        (_, _, self.yaw_imu) = euler_from_quaternion(orientation_list)
         if not self.found_heading:
-            self.current_heading = yaw_imu
+            self.current_heading = self.yaw_imu
             self.found_heading = True
         k_p = 38
-        self.rotation_imu = k_p * (self.current_heading-yaw_imu)
+        self.rotation_imu = k_p * (self.current_heading - self.yaw_imu)
         # print(" \n IMU yaw: ", yaw_imu)
 
     def prediction_callback(self, prediction):
@@ -122,22 +134,19 @@ class MazeRunner(object):
 
     def left(self):
         '''Turn the robot left'''
+
         print('Turn left!!!')
-        start_angle = self.rotation_imu
+        target_rad = pi_to_pi(np.radians(90) + self.current_heading)
+        k_p = 0.5
 
-        # Send out desired velocity
-        vel_msg = Twist()
-        vel_msg.angular.z = ANG_VEL
-        self.vel_publisher.publish(vel_msg)
-
-        # Wait for robot to reach the position
-        while True:
-            print('Target Angle: ', start_angle - 90)
-            print('Angle: ', self.rotation_imu)
-            if is_within_tolerance(start_angle - 90, self.rotation_imu, TOL):
-                print('test turn complete\n\n\n\n')
-                self.vel_publisher.publish(Twist())
+        while not rospy.is_shutdown():
+            if is_within_tolerance(target_rad, self.yaw_imu, 0.01):
+                self.found_heading = False   # updated heading after the rotation
                 break
+            else:
+                vel_msg = Twist()
+                vel_msg.angular.z = k_p * pi_to_pi(target_rad - self.yaw_imu)
+                self.vel_publisher.publish(vel_msg)
 
     def right(self):
         '''Turn the robot right'''
